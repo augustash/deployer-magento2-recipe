@@ -19,20 +19,23 @@ task('magento:setup:gulp', function () {
             run('{{bin/npm}} install -g gulp-cli yarn');
         });
     }
+
+    within('{{release_path}}/{{magento_dir}}', function () {
+        run('cp package.json.example package.json');
+        run('cp Gulpfile.esm.js.example Gulpfile.esm.js');
+    });
 });
 
 desc('Install Sass preprocessor packages');
 task('magento:setup:gulp:install', function () {
-    within('{{release_path}}/{{magento_dir}}/vendor/snowdog/frontools', function () {
+    within('{{release_path}}/{{magento_dir}}', function () {
         run('{{bin/yarn}} install');
-        run('{{bin/yarn}} add stylelint-order stylelint-scss');
-        run('{{bin/gulp}} setup');
     });
 });
 
 desc('Deploy processed Sass into CSS');
 task('magento:setup:gulp:deploy', function () {
-    within('{{release_path}}/{{magento_dir}}/tools', function () {
-        run('{{bin/gulp}} styles --prod --disableMaps');
+    within('{{release_path}}/{{magento_dir}}', function () {
+        run('{{bin/gulp}} build');
     });
 });

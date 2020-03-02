@@ -44,3 +44,16 @@ task('magento:cache:disable', function () {
         run('{{bin/magento}} {{verbose}} cache:disable');
     });
 });
+
+desc('Flush CloudFlare Cache');
+task('cloudflare:cache:flush', function () {
+    $zone = get('cloudflare_zone', null);
+    $key = get('cloudflare_key', null);
+
+    if ($zone !== null && $key !== null) {
+        run('{{bin/curl}} -X POST "https://api.cloudflare.com/client/v4/zones/{{cloudflare_zone}}/purge_cache" \
+            -H "Authorization: Bearer {{cloudflare_key}}" \
+            -H "Content-Type: application/json" \
+            --data \'{"purge_everything":true}\'');
+    }
+});

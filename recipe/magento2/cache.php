@@ -13,34 +13,47 @@ namespace Deployer;
 desc('Check Magento cache status');
 task('magento:cache:status', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} cache:status');
+        run('{{bin/magento}} cache:status {{verbose}}');
     });
 });
 
 desc('Clean Magento cache storage');
 task('magento:cache:clean', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} cache:clean');
+        run('{{bin/magento}} cache:clean {{verbose}}');
     });
 });
 
 desc('Flush Magento cache storage');
 task('magento:cache:flush', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} cache:flush');
+        run('{{bin/magento}} cache:flush {{verbose}}');
     });
 });
 
 desc('Enable Magento cache');
 task('magento:cache:enable', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} cache:enable');
+        run('{{bin/magento}} cache:enable {{verbose}}');
     });
 });
 
 desc('Disable Magento cache');
 task('magento:cache:disable', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} cache:disable');
+        run('{{bin/magento}} cache:disable {{verbose}}');
     });
+});
+
+desc('Flush CloudFlare Cache');
+task('cloudflare:cache:flush', function () {
+    $zone = get('cloudflare_zone', null);
+    $key = get('cloudflare_key', null);
+
+    if ($zone !== null && $key !== null) {
+        run('{{bin/curl}} -X POST "https://api.cloudflare.com/client/v4/zones/{{cloudflare_zone}}/purge_cache" \
+            -H "Authorization: Bearer {{cloudflare_key}}" \
+            -H "Content-Type: application/json" \
+            --data \'{"purge_everything":true}\'');
+    }
 });

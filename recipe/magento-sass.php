@@ -22,6 +22,5 @@ set('bin/yarn', '${HOME}/.npm-packages/bin/yarn');
 /**
  * Tasks.
  */
+before('magento:deploy:mode:production', 'magento:setup:gulp');
 before('magento:setup:static-content:deploy', 'magento:setup:gulp:deploy');
-after('magento:deploy:patches:files', 'magento:setup:gulp');
-after('magento:setup:gulp', 'magento:setup:gulp:install');

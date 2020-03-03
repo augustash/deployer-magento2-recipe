@@ -13,7 +13,7 @@ namespace Deployer;
 desc('Generate and install crontab for current user');
 task('magento:crontab:update', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} cron:install --force --quiet');
+        run('{{bin/magento}} cron:install --force --quiet {{verbose}}');
     });
 });
 
@@ -22,11 +22,11 @@ task('magento:crontab:remove', function () {
     // the crontab entry is release specific
     if (test('[ -h {{deploy_path}}/current ]')) {
         within('{{current_path}}', function () {
-            run('{{bin/magento}} {{verbose}} cron:remove --quiet');
+            run('{{bin/magento}} cron:remove --quiet {{verbose}}');
         });
     } else {
         within('{{release_path}}', function () {
-            run('{{bin/magento}} {{verbose}} cron:remove --quiet');
+            run('{{bin/magento}} cron:remove --quiet {{verbose}}');
         });
     }
 });

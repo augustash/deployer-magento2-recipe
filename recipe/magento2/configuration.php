@@ -13,13 +13,13 @@ namespace Deployer;
 desc('Export data to shared config files');
 task('magento:configuration:export', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} app:config:dump');
+        run('{{bin/magento}} app:config:dump {{verbose}}');
     });
 });
 
 desc('Import data from shared config files');
 task('magento:configuration:import', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} app:config:import --no-interaction');
+        run('{{bin/magento}} app:config:import --no-interaction {{verbose}}');
     });
 });

@@ -13,28 +13,28 @@ namespace Deployer;
 desc('Display current application mode');
 task('magento:deploy:mode:show', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} deploy:mode:show');
+        run('{{bin/magento}} deploy:mode:show {{verbose}}');
     });
 });
 
 desc('Enable developer application mode');
 task('magento:deploy:mode:developer', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} deploy:mode:set developer');
+        run('{{bin/magento}} deploy:mode:set developer {{verbose}}');
     });
 });
 
 desc('Enable production application mode');
 task('magento:deploy:mode:production', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} deploy:mode:set production --skip-compilation');
+        run('{{bin/magento}} deploy:mode:set production --skip-compilation {{verbose}}');
     });
 });
 
 desc('Run dependency injection compilation');
 task('magento:setup:di:compile', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} setup:di:compile --no-ansi');
+        run('{{bin/magento}} setup:di:compile --no-ansi {{verbose}}');
     });
 });
 
@@ -56,7 +56,8 @@ task('magento:setup:static-content:deploy', function () {
         }
 
         foreach ($languages as $lang) {
-            run('{{bin/magento}} {{verbose}} setup:static-content:deploy -f ' . $strategy . $lang . $themes);
+            run('{{bin/magento}} setup:static-content:deploy -f '
+                . $strategy . $lang . $themes . ' {{verbose}}');
         }
     });
 });

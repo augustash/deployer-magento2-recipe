@@ -41,6 +41,7 @@ set('verbose', '--quiet');
  * Binary locations.
  */
 set('bin/composer', '/bin/composer');
+set('bin/curl', '/bin/curl');
 set('bin/magento', '/usr/bin/env php -f {{magento_dir}}/bin/magento');
 set('bin/n98', '/usr/local/bin/n98-magerun2');
 

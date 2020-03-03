@@ -14,7 +14,7 @@ desc('Check if database schema and/or data require upgrading');
 task('magento:database:status', function () {
     within('{{release_path}}', function () {
         try {
-            run('{{bin/magento}} {{verbose}} setup:db:status --no-ansi');
+            run('{{bin/magento}} setup:db:status --no-ansi {{verbose}}');
             writeln('All modules are up to date');
         } catch (\Exception $e) {
             writeln('Please update your DB schema and data');
@@ -26,7 +26,7 @@ desc('Upgrade database');
 task('magento:database:upgrade', function () {
     within('{{release_path}}', function () {
         try {
-            run('{{bin/magento}} {{verbose}} setup:db:status --no-ansi');
+            run('{{bin/magento}} setup:db:status --no-ansi {{verbose}}');
             writeln('All modules are up to date');
             return;
         } catch (\Exception $e) {
@@ -39,13 +39,13 @@ task('magento:database:upgrade', function () {
 desc('Upgrade data fixtures');
 task('magento:database:schema:upgrade', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} setup:db-schema:upgrade');
+        run('{{bin/magento}} setup:db-schema:upgrade {{verbose}}');
     });
 });
 
 desc('Upgrade database schema');
 task('magento:database:data:upgrade', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} setup:db-data:upgrade');
+        run('{{bin/magento}} setup:db-data:upgrade {{verbose}}');
     });
 });

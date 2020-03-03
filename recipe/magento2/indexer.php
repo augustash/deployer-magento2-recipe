@@ -13,20 +13,20 @@ namespace Deployer;
 desc('Show allowed indexers');
 task('magento:indexer:info', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} indexer:info');
+        run('{{bin/magento}} indexer:info {{verbose}}');
     });
 });
 
 desc('Show status of all indexers');
 task('magento:indexer:status', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} indexer:status');
+        run('{{bin/magento}} indexer:status {{verbose}}');
     });
 });
 
 desc('Re-index data by all indexers');
 task('magento:indexer:reindex', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} {{verbose}} indexer:reindex');
+        run('{{bin/magento}} indexer:reindex {{verbose}}');
     });
 });

@@ -23,12 +23,6 @@ task('magento:setup:gulp', function () {
     within('{{release_path}}/{{magento_dir}}', function () {
         run('cp package.json.example package.json');
         run('cp Gulpfile.esm.js.example Gulpfile.esm.js');
-    });
-});
-
-desc('Install Sass preprocessor packages');
-task('magento:setup:gulp:install', function () {
-    within('{{release_path}}/{{magento_dir}}', function () {
         run('{{bin/yarn}} install');
     });
 });

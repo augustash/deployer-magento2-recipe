@@ -13,21 +13,21 @@ namespace Deployer;
 desc('Display maintenance status');
 task('magento:maintenance:status', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} maintenance:status {{verbose}}');
+        run('{{bin/magento}} maintenance:status');
     });
 });
 
 desc('Enable maintenance mode');
 task('magento:maintenance:enable', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} maintenance:enable {{verbose}}');
+        run('{{bin/magento}} maintenance:enable');
     });
 });
 
 desc('Disable maintenance mode');
 task('magento:maintenance:disable', function () {
     within('{{release_path}}', function () {
-        run('{{bin/magento}} maintenance:disable {{verbose}}');
+        run('{{bin/magento}} maintenance:disable');
     });
 });
 
@@ -36,7 +36,7 @@ task('magento:maintenance:allow-ips', function () {
     within('{{release_path}}', function () {
         $ip = ask('Enter the IP to allow: ');
         if ($ip) {
-            run('{{bin/magento}} maintenance:allow-ips {{verbose}} ' . $ip);
+            run('{{bin/magento}} maintenance:allow-ips ' . $ip);
         }
     });
 });
@@ -47,7 +47,7 @@ task('magento:deploy:maintenance', function () {
 
     if (test('[ -f {{deploy_path}}/current/{{magento_dir}}/bin/magento ]')) {
         within('{{current_path}}', function () {
-            run('{{bin/magento}} maintenance:enable {{verbose}}');
+            run('{{bin/magento}} maintenance:enable');
         });
     }
 });

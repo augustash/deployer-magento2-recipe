@@ -84,6 +84,12 @@ If the project is using our Sass process, you can include some additional config
 require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-sass.php';
 ```
 
+or
+
+```php
+require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-carbon.php';
+```
+
 ## Notifications
 
 This recipe comes with the ability to send a deployment notification message to a Slack channel. It is a very simple Web Hook implementation but should get the job done.

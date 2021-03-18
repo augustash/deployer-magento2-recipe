@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Magento 2.3.x Deployer Recipe
+ * Magento 2.3.x/2.4.x Deployer Recipe
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2020 August Ash (https://www.augustash.com)
+ * @copyright Copyright (c) 2021 August Ash (https://www.augustash.com)
  * @license   MIT
  */
 
@@ -71,6 +71,7 @@ set('magento_composer_options', '--no-progress --no-dev --prefer-dist --no-inter
 set('magento_deploy_languages', ['en_US']);
 set('magento_deploy_production', true);
 set('magento_deploy_themes', []);
+set('magento_dev_modules', ['Augustash_Archi', 'Augustash_WeltPixelLicenseOverride']);
 set('magento_patched_files', []);
 set('magento_timeout', 300);
 
@@ -153,6 +154,7 @@ task('deploy', [
 
 before('magento:composer:install', 'magento:composer:auth_config');
 after('magento:composer:install', 'magento:deploy:patches');
+after('magento:deploy:patches', 'magento:deploy:patches:modules');
 after('magento:composer:install', 'magento:deploy:patches:files');
 after('magento:deploy:patches:files', 'deploy:clear_paths');
 after('magento:crontab:disable', 'magento:consumers:remove');

@@ -1,4 +1,4 @@
-# Magento 2.3.x Deployer Recipe
+# Magento 2.3.x/2.4.x Deployer Recipe
 
 ![https://www.augustash.com](http://augustash.s3.amazonaws.com/logos/ash-inline-color-500.png)
 
@@ -25,7 +25,7 @@ At this point you've got all the dependencies, now you need to create a project 
  * Magento Deployment
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2020 August Ash (https://www.augustash.com)
+ * @copyright Copyright (c) 2021 August Ash (https://www.augustash.com)
  */
 
 namespace Deployer;

@@ -1,29 +1,30 @@
 {
     "name": "augustash/deployer-magento2-recipe",
-    "description": "Magento 2.3.x Recipe for Deployer",
     "type": "library",
+    "description": "Magento 2.3.x/2.4.x Recipe for Deployer",
+    "homepage": "https://github.com/augustash/deployer-magento2-recipe",
+    "version": "1.0.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "Peter McWilliams",
             "email": "pmcwilliams@augustash.com"
         }
     ],
+    "require": {
+        "php": ">=7.1",
+        "deployer/deployer": ">=6.3"
+    },
+    "replace": {
+        "augustash/deployer-magento2-recipe": "self.version"
+    },
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "files": [
             "autoload.php"
         ]
     },
-    "config": {
-        "sort-packages": true
-    },
-    "homepage": "https://github.com/augustash/deployer-magento2-recipe",
-    "license": "MIT",
-    "minimum-stability": "stable",
-    "replace": {
-        "augustash/deployer-magento2-recipe": "self.version"
-    },
-    "require": {
-        "deployer/deployer": ">=6.3",
-        "php": ">=7.1"
-    }
+    "minimum-stability": "stable"
 }

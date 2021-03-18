@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Magento 2.3.x Deployer Recipe
+ * Magento 2.3.x/2.4.x Deployer Recipe
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2020 August Ash (https://www.augustash.com)
+ * @copyright Copyright (c) 2021 August Ash (https://www.augustash.com)
  * @license   MIT
  */
 

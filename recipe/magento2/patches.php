@@ -38,3 +38,13 @@ task('magento:deploy:patches:files', function () {
         run("cp -f {{deploy_path}}/shared/$file {{release_path}}/$file");
     }
 });
+
+desc('Deploy patches for development modules');
+task('magento:deploy:patches:modules', function () {
+    $modules = get('magento_dev_modules', []);
+
+    foreach ($modules as $module) {
+        // Remove dev module from config.
+        run("sed -i '/$module/d' {{release_path}}/src/app/etc/config.php");
+    }
+});

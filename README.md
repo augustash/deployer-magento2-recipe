@@ -4,7 +4,7 @@
 
 **This recipe is not currently aimed at public consumption. It exists primarily for internal August Ash use.**
 
-Piggy-backing on the excellent Deployer PHP tool, this recipe makes it easy to deploy Magento 2.3.x to your servers. This assumes a release/symlink strategy.
+Piggy-backing on the excellent Deployer PHP tool, this recipe makes it easy to deploy Magento 2.3.x+ to your servers. This assumes a release/symlink strategy.
 
 ## Installation
 

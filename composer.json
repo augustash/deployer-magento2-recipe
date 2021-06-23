@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Magento 2.3.x/2.4.x Recipe for Deployer",
     "homepage": "https://github.com/augustash/deployer-magento2-recipe",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "authors": [
         {

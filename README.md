@@ -1,10 +1,10 @@
-# Magento 2.3.x/2.4.x Deployer Recipe
+# Magento 2.4.x Deployer Recipe
 
 ![https://www.augustash.com](http://augustash.s3.amazonaws.com/logos/ash-inline-color-500.png)
 
 **This recipe is not currently aimed at public consumption. It exists primarily for internal August Ash use.**
 
-Piggy-backing on the excellent Deployer PHP tool, this recipe makes it easy to deploy Magento 2.3.x+ to your servers. This assumes a release/symlink strategy.
+Piggy-backing on the excellent Deployer PHP tool, this recipe makes it easy to deploy Magento 2.4.x+ to your servers. This assumes a release/symlink strategy.
 
 ## Installation
 
@@ -25,12 +25,12 @@ At this point you've got all the dependencies, now you need to create a project 
  * Magento Deployment
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2021 August Ash (https://www.augustash.com)
+ * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
  */
 
 namespace Deployer;
 
-require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-2.3.php';
+require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-2.php';
 
 /**
  * Settings
@@ -41,7 +41,7 @@ set('repository', 'git@github.com:augustash/example.com.git');
 /**
  * Inventory.
  */
-inventory('deploy/hosts.yml');
+import('deploy/hosts.yml');
 ```
 
 Create a `hosts.yml` file that will contain information about your deployment targets. Here is a sample containing a production and staging server:
@@ -58,6 +58,8 @@ Create a `hosts.yml` file that will contain information about your deployment ta
   roles:
     - app
     - db
+  cloudflare_key:
+  cloudflare_zone:
   magento_composer_auth_config:
     - host: repo.magento.com
       user: <public_auth_key>
@@ -81,13 +83,15 @@ live:
 If the project is using our Sass process, you can include some additional configuration and tasks by adding the following to your `deploy.php` file:
 
 ```php
-require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-sass.php';
+require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-carbon.php';
 ```
 
-or
+### Include Supervisor
+
+If the project is using RabbitMQ & Supervisor, you can include some additional configuration and tasks by adding the following to your `deploy.php` file:
 
 ```php
-require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-carbon.php';
+require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-supervisor.php';
 ```
 
 ## Notifications

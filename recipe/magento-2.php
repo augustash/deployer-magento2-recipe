@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Magento 2.3.x/2.4.x Deployer Recipe
+ * Magento 2.4.x Deployer Recipe
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2021 August Ash (https://www.augustash.com)
+ * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
  * @license   MIT
  */
 
@@ -21,7 +21,6 @@ require_once 'magento2/database.php';
 require_once 'magento2/indexer.php';
 require_once 'magento2/maintenance.php';
 require_once 'magento2/patches.php';
-require_once 'magento2/queue.php';
 require_once 'magento2/slack.php';
 require_once 'magento2/validation.php';
 
@@ -48,7 +47,6 @@ set('bin/n98', '/usr/local/bin/n98-magerun2');
 /**
  * Notification settings.
  */
-
 set('slack_color_deploy', '#2C649E');
 set('slack_color_failure', '#9c0d38');
 set('slack_color_success', '#5CB589');
@@ -76,12 +74,12 @@ set('magento_patched_files', []);
 set('magento_timeout', 300);
 
 set('clear_paths', [
+    '.env.example',
     '.env.sample',
     '.eslintignore',
     'deploy.php',
     'docker-compose.local.yml',
     'docker-compose.yml',
-    'grumphp.yml',
     'README.md',
     '.git/',
     '.vscode/',
@@ -91,6 +89,7 @@ set('clear_paths', [
     'deploy/',
     'docker/',
     'docs/',
+    '{{magento_dir}}/grumphp.yml',
     '{{magento_dir}}/var/cache',
     '{{magento_dir}}/var/page_cache',
     '{{magento_dir}}/var/view_preprocessed',
@@ -102,6 +101,8 @@ set('shared_dirs', [
     '{{magento_dir}}/pub/sitemap',
     '{{magento_dir}}/var/backups',
     '{{magento_dir}}/var/composer_home',
+    '{{magento_dir}}/var/export',
+    '{{magento_dir}}/var/import',
     '{{magento_dir}}/var/import_history',
     '{{magento_dir}}/var/importexport',
     '{{magento_dir}}/var/log',
@@ -111,6 +112,7 @@ set('shared_dirs', [
 
 set('shared_files', [
     '{{magento_dir}}/app/etc/env.php',
+    '{{magento_dir}}/var/.maintenance.flag',
     '{{magento_dir}}/var/.maintenance.ip',
     '{{magento_dir}}/var/.setup_cronjob_status',
     '{{magento_dir}}/var/.update_cronjob_status',
@@ -159,7 +161,7 @@ after('magento:composer:install', 'magento:deploy:patches');
 after('magento:deploy:patches', 'magento:deploy:patches:modules');
 after('magento:composer:install', 'magento:deploy:patches:files');
 after('magento:deploy:patches:files', 'deploy:clear_paths');
-after('magento:crontab:disable', 'magento:consumers:remove');
+after('deploy:magento', 'cloudflare:cache:flush');
 after('deploy:failed', 'deploy:unlock');
 
 desc('Rollback to previous release');

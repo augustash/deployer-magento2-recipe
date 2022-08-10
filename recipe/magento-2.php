@@ -44,19 +44,6 @@ set('bin/magento', '/usr/bin/env php -f {{magento_dir}}/bin/magento');
 set('bin/n98', '/usr/local/bin/n98-magerun2');
 
 /**
- * Notification settings.
- */
-set('slack_color_deploy', '#2C649E');
-set('slack_color_failure', '#9c0d38');
-set('slack_color_success', '#5CB589');
-set('slack_text_deploy', ':rocket:  Deploying `{{branch}}` to *{{target}}* on {{hostname}}');
-set('slack_text_failure', ':boom:  Failed to deploy `{{branch}}` to *{{target}}* on {{hostname}}');
-set('slack_text_success', ':sparkles:  Successfully deployed `{{branch}}` to *{{target}}* on {{hostname}}');
-set('slack_title', function () {
-    return get('application', 'Project');
-});
-
-/**
  * Magento settings.
  */
 set('magento_dir', 'src');

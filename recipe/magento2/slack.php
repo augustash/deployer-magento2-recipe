@@ -3,6 +3,9 @@
 /**
  * Magento 2.4.x Deployer Recipe
  *
+ * @deprecated since deployer/deployer 7.0
+ * @see deployer/deployer/contrib/slack
+ *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
  * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
  * @license   MIT

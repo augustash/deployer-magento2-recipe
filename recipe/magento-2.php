@@ -21,7 +21,6 @@ require_once 'magento2/database.php';
 require_once 'magento2/indexer.php';
 require_once 'magento2/maintenance.php';
 require_once 'magento2/patches.php';
-require_once 'magento2/slack.php';
 require_once 'magento2/validation.php';
 
 use Deployer\Exception\Exception;
@@ -73,6 +72,13 @@ set('magento_dev_modules', ['Augustash_Archi', 'Augustash_WeltPixelLicenseOverri
 set('magento_patched_files', []);
 set('magento_timeout', 300);
 
+add('writable_dirs', [
+    'var',
+    'pub/static',
+    'pub/media',
+    'generated'
+]);
+
 set('clear_paths', [
     '.env.example',
     '.env.sample',
@@ -90,9 +96,12 @@ set('clear_paths', [
     'docker/',
     'docs/',
     '{{magento_dir}}/grumphp.yml',
-    '{{magento_dir}}/var/cache',
-    '{{magento_dir}}/var/page_cache',
-    '{{magento_dir}}/var/view_preprocessed',
+    '{{magento_dir}}/generated/*',
+    '{{magento_dir}}/var/generation/*',
+    '{{magento_dir}}/var/cache/*',
+    '{{magento_dir}}/var/page_cache/*',
+    '{{magento_dir}}/var/view_preprocessed/*',
+    '{{magento_dir}}/pub/static/_cache/*',
 ]);
 
 set('shared_dirs', [
@@ -142,18 +151,9 @@ task('deploy:magento', [
 
 desc('Deploy New Release');
 task('deploy', [
-    'deploy:info',
     'deploy:prepare',
-    'deploy:lock',
-    'deploy:release',
-    'deploy:update_code',
-    'deploy:shared',
-    'deploy:writable',
     'deploy:magento',
-    'deploy:symlink',
-    'deploy:unlock',
-    'cleanup',
-    'success',
+    'deploy:publish',
 ]);
 
 before('magento:composer:install', 'magento:composer:auth_config');

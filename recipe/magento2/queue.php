@@ -13,15 +13,15 @@ namespace Deployer;
 desc('Terminate Supervisor');
 task('magento:supervisor:remove', function () {
     run("pkill -f supervisord");
-})->onRoles('app');
+})->select('role=app');
 
 desc('Terminate Magento Message Consumers');
 task('magento:consumers:remove', function () {
     run("pkill -f queue:consumers:start");
     run('rm -f {{current_path}}/{{magento_dir}}/var/*.pid');
-})->onRoles('app');
+})->select('role=app');
 
 desc('Start Supervisor');
 task('magento:supervisor:start', function () {
     run("{{bin/python}} {{bin/supervisord}} -c {{supervisor_config}}");
-})->onRoles('app');
+})->select('role=app');

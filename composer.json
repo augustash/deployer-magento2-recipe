@@ -3,12 +3,20 @@
     "type": "library",
     "description": "Magento 2.4.x Recipe for Deployer",
     "homepage": "https://github.com/augustash/deployer-magento2-recipe",
+<<<<<<< Updated upstream
     "version": "1.1.0",
+=======
+    "version": "2.0.0-rc.1",
+>>>>>>> Stashed changes
     "license": "MIT",
     "authors": [
         {
             "name": "Peter McWilliams",
             "email": "pmcwilliams@augustash.com"
+        },
+        {
+            "name": "Josh Johnson",
+            "email": "josh@augustash.com"
         }
     ],
     "require": {

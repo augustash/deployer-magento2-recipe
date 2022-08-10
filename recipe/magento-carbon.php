@@ -22,7 +22,7 @@ set('bin/yarn', '${HOME}/.npm-packages/bin/yarn');
 /**
  * Magento settings.
  */
-set('shared_files', [
+add('shared_files', [
     '{{magento_dir}}/gulp-config.json',
     '{{magento_dir}}/app/etc/env.php',
     '{{magento_dir}}/dev/tools/gulp/configs/themes.local.js',

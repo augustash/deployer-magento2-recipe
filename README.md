@@ -104,8 +104,8 @@ hosts:
     stage: production
     branch: master
     magento_deploy_production: true
-    file_owner: USER_DIRECTORY # i.e., www-data, www, nginx, or SSH user
-    group_owner: USER_DIRECTORY # i.e., www-data, www, nginx, or SSH user
+    file_owner: HTTP_USER_OWNER # i.e., www-data, www, nginx, or SSH user
+    group_owner: HTTP_GROUP_OWNER # i.e., www-data, www, nginx, or SSH user
 ```
 
 ### Include Sass Compilation

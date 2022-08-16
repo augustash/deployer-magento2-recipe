@@ -1,0 +1,25 @@
+# Editor configuration normalization
+# @see http://editorconfig.org/
+
+# This is the top-most .editorconfig file; do not search in parent directories.
+root = true
+
+# All files.
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[composer.{json,lock}]
+indent_size = 4
+
+[*.{js,sass,scss,yml,yaml}]
+indent_size = 2
+indent_style = space
+
+[package.json]
+indent_size = 2
+indent_style = space

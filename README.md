@@ -39,21 +39,20 @@ require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/ma
  */
 set('application', 'example.com');
 set('repository', 'git@github.com:augustash/example.com.git');
-set('magento_patched_files', [
-    '{{magento_dir}}/app/etc/magento2-logrotate.conf',
+
+/**
+ * Files.
+ */
+add('magento_patched_files', [
+    '{{magento_dir}}/pub/.htaccess',
     '{{magento_dir}}/pub/.user.ini',
 ]);
-set('git_ssh_command', 'ssh'); // fix issue w/ `GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=accept-new'`;
-
-// File/Dir ownership (see deploy/hosts.yml)
-set('http_user', '{{file_owner}}');
-set('http_group', '{{group_owner}}');
 
 // Use `add` to combine arrays from other recipes.
-add('writable_dirs', []);
-add('shared_dirs', []);
 add('clear_paths', []);
+add('shared_dirs', []);
 add('shared_files', []);
+add('writable_dirs', []);
 
 /**
  * Inventory.
@@ -67,10 +66,10 @@ Create a `hosts.yml` file that will contain information about your deployment ta
 hosts:
   .base: &base
     forward_agent: true
+    git_ssh_command: ssh -o StrictHostKeyChecking=no
     ssh_multiplexing: true
     ssh_arguments:
       - '-o StrictHostKeyChecking=no'
-      - '-o UserKnownHostsFile=/dev/null'
     magento_composer_auth_config:
       - host: repo.magento.com
         user: MAGENTO_USER_TOKEN # Client's user/public token
@@ -84,28 +83,28 @@ hosts:
     hostname: staging.example.com
     remote_user: SSH_USER_NAME
     deploy_path: /home/USER_DIRECTORY/code/{{stage}}
+    http_user: USER_NAME
+    http_group: USER_NAME
     labels:
       stage: staging
       role: app
     stage: staging
     branch: develop
     magento_deploy_production: true
-    file_owner: HTTP_USER_OWNER # i.e., www-data, www, nginx, or SSH user
-    group_owner: HTTP_GROUP_OWNER # i.e., www-data, www, nginx, or SSH user
 
   production:
     <<: *base
     hostname: example.com
     remote_user: SSH_USER_NAME
     deploy_path: /home/USER_DIRECTORY/code/{{stage}}
+    http_user: USER_NAME
+    http_group: USER_NAME
     labels:
       stage: production
       role: app
     stage: production
     branch: master
     magento_deploy_production: true
-    file_owner: HTTP_USER_OWNER # i.e., www-data, www, nginx, or SSH user
-    group_owner: HTTP_GROUP_OWNER # i.e., www-data, www, nginx, or SSH user
 ```
 
 ### Include Sass Compilation

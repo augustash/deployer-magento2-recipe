@@ -3,12 +3,15 @@
 /**
  * Magento 2.4.x Deployer Recipe
  *
+ * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
- * @license   MIT
+ * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
  */
 
 namespace Deployer;
+
+use Deployer\Exception\Exception;
 
 require_once 'recipe/common.php';
 require_once 'magento2/backup.php';
@@ -23,15 +26,13 @@ require_once 'magento2/maintenance.php';
 require_once 'magento2/patches.php';
 require_once 'magento2/validation.php';
 
-use Deployer\Exception\Exception;
-
 /**
  * Default settings.
  */
 set('allow_anonymous_stats', false);
 set('keep_releases', 3);
 set('release_name', function () {
-    return date('YmdHis');
+    return \date('YmdHis');
 });
 set('verbose', '--quiet');
 

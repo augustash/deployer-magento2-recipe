@@ -3,9 +3,10 @@
 /**
  * Magento 2.4.x Deployer Recipe
  *
+ * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
- * @license   MIT
+ * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
  */
 
 namespace Deployer;
@@ -16,12 +17,12 @@ require_once 'magento2/queue.php';
  * Binary locations.
  */
 set('bin/python', '/usr/bin/python3');
-set('bin/supervisord', '${HOME}/supervisord/supervisord');
+set('bin/supervisord', '${HOME}/supervisor/supervisord');
 
 /**
  * Config location.
  */
-set('supervisor_config', '${HOME}/supervisord/supervisord.conf');
+set('supervisor_config', '${HOME}/supervisor/supervisord.conf');
 
 /**
  * Tasks.

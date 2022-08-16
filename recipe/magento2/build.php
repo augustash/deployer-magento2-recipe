@@ -3,9 +3,10 @@
 /**
  * Magento 2.4.x Deployer Recipe
  *
+ * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
- * @license   MIT
+ * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
  */
 
 namespace Deployer;
@@ -46,7 +47,7 @@ task('magento:setup:static-content:deploy', function () {
         $themes = get('magento_deploy_themes', []);
 
         if (count($themes) > 0) {
-            $themes = ' -t ' . implode(' -t ', $themes);
+            $themes = ' -t ' . \implode(' -t ', $themes);
         } else {
             $themes = '';
         }

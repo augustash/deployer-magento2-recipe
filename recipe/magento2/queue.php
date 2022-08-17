@@ -13,13 +13,21 @@ namespace Deployer;
 
 desc('Terminate Supervisor');
 task('magento:supervisor:remove', function () {
-    run("pkill -f supervisord");
+    try {
+        run("pkill -f supervisord");
+    } catch (\Deployer\Exception\RuntimeException $e) {
+        writeln('No supervisord process found');
+    }
 })->select('role=app');
 
 desc('Terminate Magento Message Consumers');
 task('magento:consumers:remove', function () {
-    run("pkill -f queue:consumers:start");
-    run('rm -f {{current_path}}/{{magento_dir}}/var/*.pid');
+    try {
+        run("pkill -f queue:consumers:start");
+        run('rm -f {{current_path}}/{{magento_dir}}/var/*.pid');
+    } catch (\Deployer\Exception\RuntimeException $e) {
+        writeln('No consumer processes found');
+    }
 })->select('role=app');
 
 desc('Start Supervisor');

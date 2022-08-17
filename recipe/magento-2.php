@@ -60,11 +60,11 @@ set('magento_dev_modules', ['Augustash_Archi', 'Augustash_WeltPixelLicenseOverri
 set('magento_patched_files', []);
 set('magento_timeout', 300);
 
-add('writable_dirs', [
-    'var',
-    'pub/static',
-    'pub/media',
-    'generated'
+set('writable_dirs', [
+    '{{magento_dir}}/var',
+    '{{magento_dir}}/pub/static',
+    '{{magento_dir}}/pub/media',
+    '{{magento_dir}}/generated'
 ]);
 
 set('clear_paths', [

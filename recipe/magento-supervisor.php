@@ -17,12 +17,12 @@ require_once 'magento2/queue.php';
  * Binary locations.
  */
 set('bin/python', '/usr/bin/python3');
-set('bin/supervisord', '${HOME}/supervisor/supervisord');
+set('bin/supervisord', '${HOME}/supervisord/supervisord');
 
 /**
  * Config location.
  */
-set('supervisor_config', '${HOME}/supervisor/supervisord.conf');
+set('supervisor_config', '${HOME}/supervisord/supervisord.conf');
 
 /**
  * Tasks.

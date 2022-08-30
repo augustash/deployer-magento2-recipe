@@ -70,6 +70,7 @@ hosts:
     ssh_multiplexing: true
     ssh_arguments:
       - '-o StrictHostKeyChecking=no'
+    magento_deploy_production: true
     magento_composer_auth_config:
       - host: repo.magento.com
         user: MAGENTO_USER_TOKEN # Client's user/public token
@@ -90,7 +91,6 @@ hosts:
       role: app
     stage: staging
     branch: develop
-    magento_deploy_production: true
 
   production:
     <<: *base
@@ -104,7 +104,6 @@ hosts:
       role: app
     stage: production
     branch: master
-    magento_deploy_production: true
 ```
 
 ### Include Sass Compilation

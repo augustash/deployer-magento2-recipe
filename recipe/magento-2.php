@@ -3,12 +3,15 @@
 /**
  * Magento 2.4.x Deployer Recipe
  *
+ * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
- * @license   MIT
+ * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
  */
 
 namespace Deployer;
+
+use Deployer\Exception\Exception;
 
 require_once 'recipe/common.php';
 require_once 'magento2/backup.php';
@@ -21,10 +24,7 @@ require_once 'magento2/database.php';
 require_once 'magento2/indexer.php';
 require_once 'magento2/maintenance.php';
 require_once 'magento2/patches.php';
-require_once 'magento2/slack.php';
 require_once 'magento2/validation.php';
-
-use Deployer\Exception\Exception;
 
 /**
  * Default settings.
@@ -32,7 +32,7 @@ use Deployer\Exception\Exception;
 set('allow_anonymous_stats', false);
 set('keep_releases', 3);
 set('release_name', function () {
-    return date('YmdHis');
+    return \date('YmdHis');
 });
 set('verbose', '--quiet');
 
@@ -43,19 +43,6 @@ set('bin/composer', '/bin/composer');
 set('bin/curl', '/bin/curl');
 set('bin/magento', '/usr/bin/env php -f {{magento_dir}}/bin/magento');
 set('bin/n98', '/usr/local/bin/n98-magerun2');
-
-/**
- * Notification settings.
- */
-set('slack_color_deploy', '#2C649E');
-set('slack_color_failure', '#9c0d38');
-set('slack_color_success', '#5CB589');
-set('slack_text_deploy', ':rocket:  Deploying `{{branch}}` to *{{target}}* on {{hostname}}');
-set('slack_text_failure', ':boom:  Failed to deploy `{{branch}}` to *{{target}}* on {{hostname}}');
-set('slack_text_success', ':sparkles:  Successfully deployed `{{branch}}` to *{{target}}* on {{hostname}}');
-set('slack_title', function () {
-    return get('application', 'Project');
-});
 
 /**
  * Magento settings.
@@ -72,6 +59,13 @@ set('magento_deploy_themes', []);
 set('magento_dev_modules', ['Augustash_Archi', 'Augustash_WeltPixelLicenseOverride']);
 set('magento_patched_files', []);
 set('magento_timeout', 300);
+
+set('writable_dirs', [
+    '{{magento_dir}}/var',
+    '{{magento_dir}}/pub/static',
+    '{{magento_dir}}/pub/media',
+    '{{magento_dir}}/generated'
+]);
 
 set('clear_paths', [
     '.env.example',
@@ -90,9 +84,12 @@ set('clear_paths', [
     'docker/',
     'docs/',
     '{{magento_dir}}/grumphp.yml',
-    '{{magento_dir}}/var/cache',
-    '{{magento_dir}}/var/page_cache',
-    '{{magento_dir}}/var/view_preprocessed',
+    '{{magento_dir}}/generated/*',
+    '{{magento_dir}}/var/generation/*',
+    '{{magento_dir}}/var/cache/*',
+    '{{magento_dir}}/var/page_cache/*',
+    '{{magento_dir}}/var/view_preprocessed/*',
+    '{{magento_dir}}/pub/static/_cache/*',
 ]);
 
 set('shared_dirs', [
@@ -142,18 +139,9 @@ task('deploy:magento', [
 
 desc('Deploy New Release');
 task('deploy', [
-    'deploy:info',
     'deploy:prepare',
-    'deploy:lock',
-    'deploy:release',
-    'deploy:update_code',
-    'deploy:shared',
-    'deploy:writable',
     'deploy:magento',
-    'deploy:symlink',
-    'deploy:unlock',
-    'cleanup',
-    'success',
+    'deploy:publish',
 ]);
 
 before('magento:composer:install', 'magento:composer:auth_config');

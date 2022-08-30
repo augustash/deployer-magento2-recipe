@@ -24,6 +24,8 @@ At this point you've got all the dependencies, now you need to create a project 
 /**
  * Magento Deployment
  *
+ * @see https://deployer.org/docs/7.x/tasks if you need to override or create tasks.
+ *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
  * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
  */
@@ -39,6 +41,20 @@ set('application', 'example.com');
 set('repository', 'git@github.com:augustash/example.com.git');
 
 /**
+ * Files.
+ */
+add('magento_patched_files', [
+    '{{magento_dir}}/pub/.htaccess',
+    '{{magento_dir}}/pub/.user.ini',
+]);
+
+// Use `add` to combine arrays from other recipes.
+add('clear_paths', []);
+add('shared_dirs', []);
+add('shared_files', []);
+add('writable_dirs', []);
+
+/**
  * Inventory.
  */
 import('deploy/hosts.yml');
@@ -47,35 +63,47 @@ import('deploy/hosts.yml');
 Create a `hosts.yml` file that will contain information about your deployment targets. Here is a sample containing a production and staging server:
 
 ```yaml
-.base: &base
-  hostname: example.com
-  user: deploy_user
-  deploy_path: /home/deploy_user/code/{{stage}}
-  forwardAgent: true
-  multiplexing: true
-  sshOptions:
-    StrictHostKeyChecking: no
-  roles:
-    - app
-    - db
-  cloudflare_key:
-  cloudflare_zone:
-  magento_composer_auth_config:
-    - host: repo.magento.com
-      user: <public_auth_key>
-      pass: <private_auth_key>
+hosts:
+  .base: &base
+    forward_agent: true
+    git_ssh_command: ssh -o StrictHostKeyChecking=no
+    ssh_multiplexing: true
+    ssh_arguments:
+      - '-o StrictHostKeyChecking=no'
+    magento_deploy_production: true
+    magento_composer_auth_config:
+      - host: repo.magento.com
+        user: MAGENTO_USER_TOKEN # Client's user/public token
+        pass: MAGENTO_PASSWORD_TOKEN # Client's password/secret token
+      - host: augustash.repo.repman.io
+        user: token
+        pass: AAI_REPMAN_TOKEN
 
-test:
-  <<: *base
-  stage: staging
-  branch: develop
-  magento_deploy_production: false
+  staging:
+    <<: *base
+    hostname: staging.example.com
+    remote_user: SSH_USER_NAME
+    deploy_path: /home/USER_DIRECTORY/code/{{stage}}
+    http_user: USER_NAME
+    http_group: USER_NAME
+    labels:
+      stage: staging
+      role: app
+    stage: staging
+    branch: develop
 
-live:
-  <<: *base
-  stage: production
-  branch: master
-  magento_deploy_production: true
+  production:
+    <<: *base
+    hostname: example.com
+    remote_user: SSH_USER_NAME
+    deploy_path: /home/USER_DIRECTORY/code/{{stage}}
+    http_user: USER_NAME
+    http_group: USER_NAME
+    labels:
+      stage: production
+      role: app
+    stage: production
+    branch: master
 ```
 
 ### Include Sass Compilation
@@ -92,44 +120,4 @@ If the project is using RabbitMQ & Supervisor, you can include some additional c
 
 ```php
 require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-supervisor.php';
-```
-
-## Notifications
-
-This recipe comes with the ability to send a deployment notification message to a Slack channel. It is a very simple Web Hook implementation but should get the job done.
-
-### Configuration
-
-`slack_webhook` - Define the Slack incoming webhook URL, *required*
-
-`slack_title` - The Slack message title, defaults to `{{application}}`
-
-`slack_color_deploy` - The color attachment for a deployment message
-
-`slack_color_failure` - The color attachment for a deployment failure message
-
-`slack_color_success` - The color attachment for a deployment successful message
-
-`slack_text_deploy` - The deployment message template, Markdown is supported
-
-`slack_text_failure` - The failure message template, Markdown is supported
-
-`slack_text_success` - The successful message template, Markdown is supported
-
-### Sample Usage
-
-You must define the `slack_webhook` variable and then activate at least one notification hook for the messages to work. Here is a sample configuration:
-
-```php
-/**
- * Settings
- */
-set('slack_webhook', 'https://hooks.slack.com/services/...');
-
-/**
- * Notifications.
- */
-before('deploy', 'slack:notify');
-after('success', 'slack:notify:success');
-after('deploy:failed', 'slack:notify:failure');
 ```

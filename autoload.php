@@ -1,11 +1,12 @@
 <?php
 
 /**
- * Magento 2.3.x/2.4.x Deployer Recipe
+ * Magento 2.4.x Deployer Recipe
+ *
+ * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2021 August Ash (https://www.augustash.com)
- * @license   MIT
+ * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
  */
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
+\set_include_path(\get_include_path() . PATH_SEPARATOR . __DIR__);

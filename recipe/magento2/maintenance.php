@@ -31,10 +31,10 @@ task('magento:maintenance:disable', function () {
         run('{{bin/magento}} maintenance:disable');
     });
 
-    if (test('[ -f {{release_path}}/var/maintenance.flag ]')) {
+    if (test('[ -f {{release_path}}/var/.maintenance.flag ]')) {
         within('{{release_path}}/var', function () {
             info('Removing var/maintenance.flag file');
-            run('rm maintenance.flag');
+            run('rm .maintenance.flag');
         });
     }
 });

@@ -30,6 +30,13 @@ task('magento:maintenance:disable', function () {
     within('{{release_path}}', function () {
         run('{{bin/magento}} maintenance:disable');
     });
+
+    if (test('[ -f {{release_path}}/var/maintenance.flag ]')) {
+        within('{{release_path}}/var', function () {
+            info('Removing var/maintenance.flag file');
+            run('rm maintenance.flag');
+        });
+    }
 });
 
 desc('Set maintenance mode exempt IPs');

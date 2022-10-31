@@ -124,7 +124,7 @@ task('deploy:magento', [
     'magento:composer:install',
     'magento:deploy:mode:production',
     'magento:setup:static-content:deploy',
-    'magento:deploy:maintenance',
+    'magento:maintenance:enable',
     'magento:cache:flush',
     'magento:setup:di:compile',
     'magento:composer:autoload',

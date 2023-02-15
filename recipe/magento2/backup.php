@@ -1,91 +1,117 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
 use Deployer\Exception\Exception;
 
-desc('Create a database dump');
-task('magento:dump:db', function () {
-    if (test('[ ! -f {{bin/n98}} ]')) {
-        throw new Exception('n98-magerun is not installed! Check the `bin/n98` variable.');
-    }
+/**
+ * Binary locations.
+ */
+set('bin/n98-magerun2', '/usr/local/bin/n98-magerun2');
+set('default_timeout', 300);
+set('download_name', 'deployer_backup');
 
-    within('{{release_path}}/{{magento_dir}}/var', function () {
-        run('{{bin/n98}} db:dump -s @development -c gzip $(date +%Y%m%d%H%M%S).sql.gz {{verbose}}');
+/**
+ * Tasks.
+ */
+desc('Check for n98-magerun2');
+task('magento:deploy:check:n98', function () {
+    if (test('[ ! -f {{bin/n98-magerun2}} ]')) {
+        throw new Exception('n98-magerun2 is not installed! Check the `bin/n98-magerun2` variable.');
+    }
+})->select('role=app');
+
+desc('Create a database dump (not including logs, sessions)');
+task('magento:database:dump-dev', function () {
+    within('{{release_or_current_path}}/{{magento_root}}var', function () {
+        run('{{bin/n98-magerun2}} db:dump --no-interaction --strip="@stripped @development" -c gzip $(date +%Y%m%d%H%M%S)-dev.sql.gz');
     });
-});
+})->select('role=app');
 
-desc('Download a database dump');
-task('magento:download:db', function () {
-    if (test('[ ! -f {{bin/n98}} ]')) {
-        throw new Exception('n98-magerun is not installed! Check the `bin/n98` variable.');
-    }
+desc('Create a quick database dump');
+task('magento:database:dump-quick', function () {
+    within('{{release_or_current_path}}/{{magento_root}}var', function () {
+        run('{{bin/n98-magerun2}} db:dump --no-interaction --strip="@stripped" -c gzip $(date +%Y%m%d%H%M%S)-quick.sql.gz');
+    });
+})->select('role=app');
 
-    within('{{release_path}}/{{magento_dir}}/var', function () {
-        $timeout = get('magento_timeout', 300);
+desc('Create a full database dump');
+task('magento:database:dump', function () {
+    within('{{release_or_current_path}}/{{magento_root}}var', function () {
+        run('{{bin/n98-magerun2}} db:dump --no-interaction -c gzip $(date +%Y%m%d%H%M%S).sql.gz');
+    });
+})->select('role=app');
+
+desc('Download a full database dump');
+task('magento:download:database', function () {
+    within('{{release_or_current_path}}/{{magento_root}}var', function () {
+        $filename = get('download_name', 'deployer_backup') . '_db.sql.gz';
         $localPath = runLocally('pwd');
+        $timeout = get('default_timeout', 300);
 
-        writeln('Creating a new database dump...');
-        run('{{bin/n98}} db:dump -s @development -c gzip deployer_db_backup.sql.gz {{verbose}}');
-
-        writeln('Downloading the database dump...');
+        run('{{bin/n98-magerun2}} db:dump --no-interaction -c gzip ' . $filename);
         download(
-            '{{release_path}}/{{magento_dir}}/var/deployer_db_backup.sql.gz',
+            '{{release_or_current_path}}/{{magento_root}}var/' . $filename,
             $localPath . '/',
             [
                 'timeout' => $timeout,
             ]
         );
-        run('rm -f deployer_db_backup.sql.gz');
+        run('rm -f ' . $filename);
+
+        writeln(\sprintf(
+            'The downloaded backup file: %s',
+            $filename
+        ));
     });
+})->select('role=app');
 
-    writeln('Your database file is called: deployer_db_backup.sql.gz');
-});
-
-desc('Create a media dump');
-task('magento:dump:media', function () {
-    if (test('[ ! -f {{bin/n98}} ]')) {
-        throw new Exception('n98-magerun is not installed! Check the `bin/n98` variable.');
-    }
-
-    within('{{release_path}}/{{magento_dir}}/var', function () {
-        run('{{bin/n98}} media:dump --strip media-$(date +%Y%m%d%H%M%S).zip {{verbose}}');
-    });
-});
-
-desc('Download a media dump');
+desc('Download a full media dump');
 task('magento:download:media', function () {
-    if (test('[ ! -f {{bin/n98}} ]')) {
-        throw new Exception('n98-magerun is not installed! Check the `bin/n98` variable.');
-    }
-
-    within('{{release_path}}/{{magento_dir}}/var', function () {
-        $timeout = get('magento_timeout', 300);
+    within('{{release_or_current_path}}/{{magento_root}}var', function () {
+        $filename = get('download_name', 'deployer_backup') . '_media.zip';
         $localPath = runLocally('pwd');
+        $timeout = get('default_timeout', 300);
 
-        writeln('Creating a new media dump...');
-        run('{{bin/n98}} media:dump --strip deployer_media_backup.zip {{verbose}}');
-
-        writeln('Downloading the media dump...');
+        run('{{bin/n98-magerun2}} media:dump --no-interaction --strip ' . $filename);
         download(
-            '{{release_path}}/{{magento_dir}}/var/deployer_media_backup.zip',
+            '{{release_or_current_path}}/{{magento_root}}var/' . $filename,
             $localPath . '/',
             [
                 'timeout' => $timeout,
             ]
         );
+        run('rm -f ' . $filename);
 
-        run('rm -f deployer_media_backup.zip');
+        writeln(\sprintf(
+            'The downloaded backup file: %s',
+            $filename
+        ));
     });
+})->select('role=app');
 
-    writeln('Your media file is called: deployer_media_backup.zip');
-});
+desc('Create a full media dump');
+task('magento:media:dump', function () {
+    within('{{release_or_current_path}}/{{magento_root}}var', function () {
+        run('{{bin/n98-magerun2}} media:dump --no-interaction --strip $(date +%Y%m%d%H%M%S).zip');
+    });
+})->select('role=app');
+
+/**
+ * Events
+ */
+before('magento:database:dump-dev', 'magento:deploy:check:n98');
+before('magento:database:dump-quick', 'magento:deploy:check:n98');
+before('magento:database:dump', 'magento:deploy:check:n98');
+before('magento:download:database', 'magento:deploy:check:n98');
+before('magento:download:media', 'magento:deploy:check:n98');
+before('magento:media:dump', 'magento:deploy:check:n98');

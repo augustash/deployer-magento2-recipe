@@ -1,16 +1,19 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
+/**
+ * phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+ */
 require_once 'magento2/queue.php';
 
 /**
@@ -27,6 +30,6 @@ set('supervisor_config', '${HOME}/supervisord/supervisord.conf');
 /**
  * Tasks.
  */
-after('magento:crontab:disable', 'magento:supervisor:remove');
-after('magento:supervisor:remove', 'magento:consumers:remove');
-after('deploy:magento', 'magento:supervisor:start');
+after('magento:crontab:disable', 'magento:queue:supervisor:remove');
+after('magento:queue:supervisor:remove', 'magento:queue:consumers:remove');
+after('deploy:magento', 'magento:queue:supervisor:start');

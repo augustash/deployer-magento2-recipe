@@ -1,16 +1,19 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
+/**
+ * phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+ */
 require_once 'magento2/sass.php';
 
 /**
@@ -23,13 +26,13 @@ set('bin/npm', '/usr/bin/env npm');
  * Magento settings.
  */
 add('shared_files', [
-    '{{magento_dir}}/gulp-config.json',
-    '{{magento_dir}}/dev/tools/gulp/configs/themes.local.js',
+    '{{magento_root}}/dev/tools/gulp/configs/themes.local.js',
+    '{{magento_root}}/gulp-config.json',
 ]);
 
 /**
  * Tasks.
  */
-before('magento:setup:static-content:deploy', 'magento:setup:carbon:deploy');
-after('magento:deploy:patches:files', 'magento:setup:gulp');
-after('magento:setup:gulp', 'magento:setup:carbon:install');
+after('magento:carbon:setup', 'magento:carbon:install');
+after('magento:override:files', 'magento:carbon:setup');
+before('magento:setup:static-content:deploy', 'magento:carbon:deploy');

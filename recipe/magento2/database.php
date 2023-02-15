@@ -1,52 +1,53 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
-desc('Check if database schema and/or data require upgrading');
-task('magento:database:status', function () {
-    within('{{release_path}}', function () {
-        try {
-            run('{{bin/magento}} setup:db:status --no-ansi');
-            writeln('All modules are up to date');
-        } catch (\Exception $e) {
-            writeln('Please update your DB schema and data');
-        }
-    });
-});
+use Deployer\Exception\RunException;
 
-desc('Upgrade database');
+desc('Check Magento if database upgrade needed');
+task('magento:database:needs_upgrade', function () {
+    within('{{release_or_current_path}}', function () {
+        $upgradeNeeded = false;
+        try {
+            run('{{bin/magento}} setup:db:status');
+        } catch (RunException $e) {
+            if ($e->getExitCode() !== 2) {
+                throw $e;
+            }
+            $upgradeNeeded = true;
+        }
+        return $upgradeNeeded;
+    });
+})->select('role=app');
+
+desc('Upgrade Magento database');
 task('magento:database:upgrade', function () {
-    within('{{release_path}}', function () {
-        try {
-            run('{{bin/magento}} setup:db:status --no-ansi');
-            writeln('All modules are up to date');
-            return;
-        } catch (\Exception $e) {
-            invoke('magento:database:schema:upgrade');
-            invoke('magento:database:data:upgrade');
+    within('{{release_or_current_path}}', function () {
+        if (get('magento:database:needs_upgrade')) {
+            run('{{bin/magento}} setup:upgrade --keep-generated --no-interaction');
         }
     });
-});
+})->select('role=app');
 
-desc('Upgrade data fixtures');
-task('magento:database:schema:upgrade', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/magento}} setup:db-schema:upgrade');
+desc('Upgrade Magento database fixtures');
+task('magento:database:upgrade:data', function () {
+    within('{{release_or_current_path}}', function () {
+        run('{{bin/magento}} setup:db-data:upgrade --no-interaction');
     });
-});
+})->select('role=app');
 
-desc('Upgrade database schema');
-task('magento:database:data:upgrade', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/magento}} setup:db-data:upgrade');
+desc('Upgrade Magento data schema');
+task('magento:database:upgrade:schema', function () {
+    within('{{release_or_current_path}}', function () {
+        run('{{bin/magento}} setup:db-schema:upgrade --no-interaction');
     });
-});
+})->select('role=app');

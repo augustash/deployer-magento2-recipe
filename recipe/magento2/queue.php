@@ -1,27 +1,43 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
-desc('Terminate Supervisor');
-task('magento:supervisor:remove', function () {
-    run("pkill -f supervisord || true");
+/**
+ * Binary locations.
+ */
+set('bin/python', '/usr/bin/python3');
+set('bin/supervisord', '${HOME}/supervisord/supervisord');
+
+/**
+ * Default settings.
+ */
+set('supervisor_config', '${HOME}/supervisord/supervisord.conf');
+
+/**
+ * Tasks.
+ */
+desc('Terminate Magento Message Consumers');
+task('magento:queue:consumers:remove', function () {
+    run('pkill -f queue:consumers:start || true');
 })->select('role=app');
 
-desc('Terminate Magento Message Consumers');
-task('magento:consumers:remove', function () {
-    run("pkill -f queue:consumers:start || true");
+desc('Terminate Supervisor');
+task('magento:queue:supervisor:remove', function () {
+    run('pkill -f supervisord || true');
 })->select('role=app');
 
 desc('Start Supervisor');
-task('magento:supervisor:start', function () {
-    run("{{bin/python}} {{bin/supervisord}} -c {{supervisor_config}}");
+task('magento:queue:supervisor:start', function () {
+    if (test('[ -f {{supervisor_config}} ]')) {
+        run('{{bin/python}} {{bin/supervisord}} -c {{supervisor_config}}');
+    }
 })->select('role=app');

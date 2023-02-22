@@ -1,9 +1,8 @@
 {
     "name": "augustash/deployer-magento2-recipe",
-    "description": "Magento 2.4.x Recipe for Deployer",
+    "description": "Magento 2.4 Recipe for Deployer",
     "license": "MIT",
     "type": "library",
-    "version": "2.0.2",
     "authors": [
         {
             "name": "Peter McWilliams",
@@ -18,9 +17,6 @@
     "require": {
         "php": "^8.0 || ^7.3",
         "deployer/deployer": ">=7.0"
-    },
-    "replace": {
-        "augustash/deployer-magento2-recipe": "self.version"
     },
     "minimum-stability": "stable",
     "autoload": {

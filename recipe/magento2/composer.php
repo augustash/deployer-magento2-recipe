@@ -1,19 +1,27 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
+/**
+ * Binary locations.
+ */
+set('bin/composer', '/bin/composer');
+
+/**
+ * Tasks.
+ */
 desc('Generate Composer HTTP-Basic Auth');
 task('magento:composer:auth_config', function () {
-    within('{{release_path}}', function () {
+    within('{{release_or_current_path}}/{{magento_root}}', function () {
         $composerAuthConfig = get('magento_composer_auth_config', []);
         foreach ($composerAuthConfig as $authConfig) {
             $host = $authConfig['host'] ?? false;
@@ -22,29 +30,23 @@ task('magento:composer:auth_config', function () {
             $value = \sprintf('http-basic.%s %s %s', $host, $user, $pass);
 
             if ($host && $user && $pass) {
-                run('{{bin/composer}} {{verbose}} --working-dir={{release_path}}/{{magento_dir}} -q config ' . $value);
+                run('{{bin/composer}} --working-dir={{release_or_current_path}}/{{magento_root}} -q config ' . $value);
             }
         }
     });
-});
+})->select('role=app');
 
-desc('Generate Composer Autoloader');
+desc('Dump optimized Composer autoload files');
 task('magento:composer:autoload', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/composer}} {{verbose}} --working-dir={{release_path}}/{{magento_dir}} dump-autoload -o --apcu');
+    within('{{release_or_current_path}}/{{magento_root}}', function () {
+        run('{{bin/composer}} --working-dir={{release_or_current_path}}/{{magento_root}} dump-autoload --optimize --apcu --no-dev');
     });
-});
+})->select('role=app');
 
 desc('Run Composer install');
 task('magento:composer:install', function () {
-    within('{{release_path}}', function () {
-        $options = get('magento_composer_options', '--no-progress --no-dev --prefer-dist --no-interaction');
-        $isProduction = get('magento_deploy_production', true);
-
-        if ($isProduction === true) {
-            $options .= ' --optimize-autoloader';
-        }
-
-        run('{{bin/composer}} {{verbose}} --working-dir={{release_path}}/{{magento_dir}} install ' . $options);
+    within('{{release_or_current_path}}/{{magento_root}}', function () {
+        $options = \implode(' ', get('magento_composer_options', []));
+        run('{{bin/composer}} --working-dir={{release_or_current_path}}/{{magento_root}} install ' . $options . ' 2>&1');
     });
-});
+})->select('role=app');

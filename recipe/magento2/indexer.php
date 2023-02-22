@@ -1,33 +1,26 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
-desc('Show allowed indexers');
-task('magento:indexer:info', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/magento}} indexer:info');
+desc('Re-index data by all indexers');
+task('magento:indexer:reindex', function () {
+    within('{{release_or_current_path}}', function () {
+        run('{{bin/magento}} indexer:reindex --no-interaction');
     });
-});
+})->select('role=app');
 
 desc('Show status of all indexers');
 task('magento:indexer:status', function () {
-    within('{{release_path}}', function () {
+    within('{{release_or_current_path}}', function () {
         run('{{bin/magento}} indexer:status');
     });
-});
-
-desc('Re-index data by all indexers');
-task('magento:indexer:reindex', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/magento}} indexer:reindex');
-    });
-});
+})->select('role=app');

@@ -1,37 +1,44 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
-desc('Run Sass preprocessor setup');
-task('magento:setup:gulp', function () {
+/**
+ * Binary locations.
+ */
+set('bin/gulp', '${HOME}/.npm-packages/bin/gulp');
+set('bin/npm', '/usr/bin/env npm');
+
+/**
+ * Tasks.
+ */
+desc('Deploy processed Carbon Sass into CSS');
+task('magento:carbon:deploy', function () {
+    within('{{release_or_current_path}}/{{magento_root}}', function () {
+        run('{{bin/gulp}} build');
+    });
+})->select('role=app');
+
+desc('Install Carbon Sass packages');
+task('magento:carbon:install', function () {
+    within('{{release_or_current_path}}/{{magento_root}}', function () {
+        run('{{bin/npm}} install');
+    });
+})->select('role=app');
+
+desc('Setup the Sass preprocessor');
+task('magento:carbon:setup', function () {
     if (test('[ ! -f {{bin/gulp}} ]')) {
-        within('{{release_path}}', function () {
-            run('mkdir -p ${HOME}/.npm-packages');
-            run('{{bin/npm}} config set prefix ${HOME}/.npm-packages');
+        within('{{release_or_current_path}}/{{magento_root}}', function () {
             run('{{bin/npm}} install -g gulp-cli');
         });
     }
-});
-
-desc('Install Carbon Sass packages');
-task('magento:setup:carbon:install', function () {
-    within('{{release_path}}/{{magento_dir}}', function () {
-        run('{{bin/npm}} install');
-    });
-});
-
-desc('Deploy processed Carbon Sass into CSS');
-task('magento:setup:carbon:deploy', function () {
-    within('{{release_path}}/{{magento_dir}}', function () {
-        run('{{bin/gulp}} build');
-    });
-});
+})->select('role=app');

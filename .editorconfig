@@ -16,10 +16,8 @@ trim_trailing_whitespace = true
 [composer.{json,lock}]
 indent_size = 4
 
-[*.{js,sass,scss,yml,yaml}]
+[*.{js,less,scss,yml,yaml}]
 indent_size = 2
-indent_style = space
 
 [package.json]
 indent_size = 2
-indent_style = space

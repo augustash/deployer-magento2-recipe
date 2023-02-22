@@ -1,26 +1,53 @@
 <?php
 
 /**
- * Magento 2.4.x Deployer Recipe
- *
- * Provides a Deployer-based series of recipes to properly deploy Magento 2.4+.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright 2022 August Ash, Inc. (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
-desc('Export data to shared config files');
-task('magento:configuration:export', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/magento}} app:config:dump');
-    });
-});
+use Deployer\Exception\RunException;
 
-desc('Import data from shared config files');
-task('magento:configuration:import', function () {
-    within('{{release_path}}', function () {
-        run('{{bin/magento}} app:config:import --no-interaction');
+desc('Export store data to shared config files');
+task('magento:configuration:export', function () {
+    within('{{release_or_current_path}}', function () {
+        run('{{bin/magento}} app:config:dump scopes');
     });
-});
+})->select('role=app');
+
+desc('Import Magento configuration from filesystem');
+task('magento:configuration:import', function () {
+    within('{{release_or_current_path}}', function () {
+        if (get('magento:configuration:needs_import')) {
+            run('{{bin/magento}} app:config:import --no-interaction');
+        }
+    });
+})->select('role=app');
+
+desc('Check Magento if configuration import needed');
+task('magento:configuration:needs_import', function () {
+    within('{{release_or_current_path}}', function () {
+        $importNeeded = false;
+        try {
+            run('{{bin/magento}} app:config:status');
+        } catch (RunException $e) {
+            if ($e->getExitCode() !== 2) {
+                throw $e;
+            }
+            $importNeeded = true;
+        }
+        return $importNeeded;
+    });
+})->select('role=app');
+
+desc('Check Magento configuration status');
+task('magento:configuration:status', function () {
+    within('{{release_or_current_path}}', function () {
+        run('{{bin/magento}} app:config:status');
+    });
+})->select('role=app');

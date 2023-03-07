@@ -124,7 +124,7 @@ task('deploy:magento', [
 ]);
 
 /**
- * If not deploying artifact with a CI proceses, first run:
+ * If not deploying artifact with a CI processes, first run:
  *
  * $ dep artifact:build local
  */
@@ -180,4 +180,4 @@ task('artifact:prepare', [
 fail('deploy:artifact', 'deploy:failed');
 after('deploy:failed', 'deploy:unlock');
 after('magento:override:files', 'magento:override:modules');
-// before('magento:static-content:deploy', 'magento:sync:content_version');
+before('magento:static-content:deploy', 'magento:sync:content_version');

@@ -90,16 +90,8 @@ task('magento:static-content:deploy', function () {
             $strategy = ' -s ' . $strategy;
         }
 
-        // run(\sprintf(
-        //     '{{bin/magento}} setup:static-content:deploy -f --no-interaction --content-version={{content_version}} --jobs %d%s%s -- %s',
-        //     $jobs,
-        //     $strategy,
-        //     $themes,
-        //     $languages
-        // ));
-
         run(\sprintf(
-            '{{bin/magento}} setup:static-content:deploy -f --no-interaction --jobs %d%s%s -- %s',
+            '{{bin/magento}} setup:static-content:deploy -f -n --content-version={{content_version}} -j %d%s%s -- %s',
             $jobs,
             $strategy,
             $themes,

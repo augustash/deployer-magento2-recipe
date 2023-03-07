@@ -135,6 +135,7 @@ desc('Deploy Magento 2 build artifact');
 task('deploy:artifact', [
     'artifact:prepare',
     'magento:deploy:verify',
+    'magento:override:files',
     'magento:update',
     // 'cachetool:clear:opcache',
     'deploy:publish',

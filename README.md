@@ -22,37 +22,36 @@ At this point you've got all the dependencies, now you need to create a project 
 <?php
 
 /**
- * Magento Deployment
- *
- * @see https://deployer.org/docs/7.x/tasks if you need to override or create tasks.
+ * Deployer Recipe for Magento 2.4 Deployments
  *
  * @author    Peter McWilliams <pmcwilliams@augustash.com>
- * @copyright Copyright (c) 2022 August Ash (https://www.augustash.com)
+ * @copyright Copyright (c) 2023 August Ash (https://www.augustash.com)
  */
+
+declare(strict_types=1);
 
 namespace Deployer;
 
+/**
+ * phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+ */
 require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-2.php';
 
 /**
- * Settings
+ * Project Settings.
  */
-set('application', 'example.com');
+set('bin/composer', '~/.local/bin/composer');
+set('bin/n98-magerun2', '~/.local/bin/n98-magerun2');
 set('repository', 'git@github.com:augustash/example.com.git');
 
 /**
  * Files.
  */
-add('magento_patched_files', [
-    '{{magento_dir}}/pub/.htaccess',
-    '{{magento_dir}}/pub/.user.ini',
+add('magento_override_files', [
+    'app/etc/logrotate.conf',
+    'pub/.htaccess',
+    'pub/.user.ini',
 ]);
-
-// Use `add` to combine arrays from other recipes.
-add('clear_paths', []);
-add('shared_dirs', []);
-add('shared_files', []);
-add('writable_dirs', []);
 
 /**
  * Inventory.
@@ -65,12 +64,9 @@ Create a `hosts.yml` file that will contain information about your deployment ta
 ```yaml
 hosts:
   .base: &base
-    forward_agent: true
+    cloudflare_key:
+    deploy_path: /home/{{http_user}}/code/{{stage}}
     git_ssh_command: ssh -o StrictHostKeyChecking=no
-    ssh_multiplexing: true
-    ssh_arguments:
-      - '-o StrictHostKeyChecking=no'
-    magento_deploy_production: true
     magento_composer_auth_config:
       - host: repo.magento.com
         user: MAGENTO_USER_TOKEN # Client's user/public token
@@ -78,40 +74,33 @@ hosts:
       - host: augustash.repo.repman.io
         user: token
         pass: AAI_REPMAN_TOKEN
+    magento_deploy_production: true
 
   staging:
     <<: *base
-    hostname: staging.example.com
-    remote_user: SSH_USER_NAME
-    deploy_path: /home/USER_DIRECTORY/code/{{stage}}
-    http_user: USER_NAME
-    http_group: USER_NAME
-    labels:
-      stage: staging
-      role: app
-    stage: staging
     branch: develop
+    cloudflare_zone:
+    hostname: STAGING_HOSTNAME
+    http_group: STAGING_HTTP_GROUP
+    http_user: STAGING_HTTP_USER
+    labels:
+      role: app
+      stage: staging
+    remote_user: STAGING_SSH_USER
+    stage: staging
 
   production:
     <<: *base
-    hostname: example.com
-    remote_user: SSH_USER_NAME
-    deploy_path: /home/USER_DIRECTORY/code/{{stage}}
-    http_user: USER_NAME
-    http_group: USER_NAME
-    labels:
-      stage: production
-      role: app
-    stage: production
     branch: master
-```
-
-### Include Sass Compilation
-
-If the project is using our Sass process, you can include some additional configuration and tasks by adding the following to your `deploy.php` file:
-
-```php
-require_once __DIR__ . '/src/vendor/augustash/deployer-magento2-recipe/recipe/magento-carbon.php';
+    cloudflare_zone:
+    hostname: PRODUCTION_HOSTNAME
+    http_group: PRODUCTION_HTTP_GROUP
+    http_user: PRODUCTION_HTTP_USER
+    labels:
+      role: app
+      stage: production
+    remote_user: PRODUCTION_SSH_USER
+    stage: production
 ```
 
 ### Include Supervisor

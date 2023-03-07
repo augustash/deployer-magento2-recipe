@@ -107,3 +107,31 @@ task('magento:sync:content_version', function () {
         $host->set('content_version', $timestamp);
     });
 })->once();
+
+desc('Sync cache prefix');
+task('magento:sync:cache_prefix', function () {
+    within('{{release_or_current_path}}', function () {
+        if (test('[ ! -f {{release_or_current_path}}/{{magento_root}}pub/VERSION.json ]')) {
+            $cachePrefix = run('cat {{deploy_path}}/.dep/latest_release || echo 0');
+        } else {
+            $cachePrefix = run('grep -oP \'(?<="run_id": ")[^"]*\' {{release_or_current_path}}/{{magento_root}}pub/VERSION.json || echo 0');
+        }
+
+        // set cache prefix to the deploy run ID
+        run(\sprintf(
+            '{{bin/magento}} setup:config:set -n --cache-id-prefix="%s_" --page-cache-id-prefix="%s_"',
+            $cachePrefix,
+            $cachePrefix
+        ));
+
+        // update preload keys
+        run('{{bin/sed}} -i "s/.*EAV_ENTITY_TYPES.*/                        \'' . $cachePrefix . '_EAV_ENTITY_TYPES\',/" \
+            {{deploy_path}}/shared/{{magento_root}}app/etc/env.php');
+        run('{{bin/sed}} -i "s/.*GLOBAL_PLUGIN_LIST.*/                        \'' . $cachePrefix . '_GLOBAL_PLUGIN_LIST\',/" \
+            {{deploy_path}}/shared/{{magento_root}}app/etc/env.php');
+        run('{{bin/sed}} -i "s/.*DB_IS_UP_TO_DATE.*/                        \'' . $cachePrefix . '_DB_IS_UP_TO_DATE\',/" \
+            {{deploy_path}}/shared/{{magento_root}}app/etc/env.php');
+        run('{{bin/sed}} -i "s/.*SYSTEM_DEFAULT.*/                        \'' . $cachePrefix . '_SYSTEM_DEFAULT\',/" \
+            {{deploy_path}}/shared/{{magento_root}}app/etc/env.php');
+    });
+})->select('role=app');

@@ -37,6 +37,9 @@ set('artifact_excludes_path', 'deploy');
 set('artifact_file', 'artifact_bundle.tar');
 set('artifact_path', 'artifacts');
 set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+set('bin/sed', function () {
+    return which('sed');
+});
 set('clear_paths', []);
 set('content_version', function () {
     return time();
@@ -181,3 +184,4 @@ fail('deploy:artifact', 'deploy:failed');
 after('deploy:failed', 'deploy:unlock');
 after('magento:override:files', 'magento:override:modules');
 before('magento:static-content:deploy', 'magento:sync:content_version');
+before('magento:configuration:import', 'magento:sync:cache_prefix');

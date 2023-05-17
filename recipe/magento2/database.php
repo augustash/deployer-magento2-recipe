@@ -40,9 +40,7 @@ task('magento:database:needs_upgrade', function () {
 desc('Upgrade Magento database');
 task('magento:database:upgrade', function () {
     within('{{release_or_current_path}}', function () {
-        if (get('magento:database:needs_upgrade')) {
-            run('{{bin/magento}} setup:upgrade --keep-generated --no-interaction');
-        }
+        run('{{bin/magento}} setup:upgrade --keep-generated --no-interaction');
     });
 })->select('role=app');
 

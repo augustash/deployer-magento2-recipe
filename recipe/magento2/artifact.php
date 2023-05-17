@@ -14,8 +14,12 @@ namespace Deployer;
 use Deployer\Exception\GracefulShutdownException;
 
 /**
- * Binary locations.
+ * Settings.
  */
+set('artifact_excludes_file', '.excludes');
+set('artifact_excludes_path', 'deploy');
+set('artifact_file', 'artifact_bundle.tar');
+set('artifact_path', 'artifacts');
 set('bin/tar', function () {
     return which('tar');
 });

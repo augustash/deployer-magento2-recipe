@@ -13,6 +13,14 @@ namespace Deployer;
 
 use Deployer\Exception\RunException;
 
+/**
+ * Settings.
+ */
+set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+
+/**
+ * Tasks.
+ */
 desc('Export store data to shared config files');
 task('magento:configuration:export', function () {
     within('{{release_or_current_path}}', function () {

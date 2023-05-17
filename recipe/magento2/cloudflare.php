@@ -12,13 +12,11 @@ declare(strict_types=1);
 namespace Deployer;
 
 /**
- * Binary locations.
+ * Settings.
  */
-set('bin/curl', '/bin/curl');
-
-/**
- * Default settings.
- */
+set('bin/curl', function () {
+    return which('curl');
+});
 set('cloudflare_key', null);
 set('cloudflare_zone', null);
 

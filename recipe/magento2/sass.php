@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Deployer;
 
 /**
- * Binary locations.
+ * Settings.
  */
 set('bin/gulp', '${HOME}/.npm-packages/bin/gulp');
 set('bin/npm', '/usr/bin/env npm');

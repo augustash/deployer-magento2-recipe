@@ -11,12 +11,22 @@ declare(strict_types=1);
 
 namespace Deployer;
 
+/**
+ * Settings.
+ */
+set('bin/crontab', function () {
+    return which('crontab');
+});
+
+/**
+ * Tasks.
+ */
 desc('Enable Magento Cron');
 task('magento:crontab:enable', function () {
-    run('crontab -l |sed "/cron:run/s/^#//" | crontab -');
+    run('{{bin/crontab}} -l |sed "/cron:run/s/^#//" | crontab -');
 })->select('role=app');
 
 desc('Disable Magento Cron');
 task('magento:crontab:disable', function () {
-    run('crontab -l |sed "/cron:run/s!^!#!" | crontab -');
+    run('{{bin/crontab}} -l |sed "/cron:run/s!^!#!" | crontab -');
 })->select('role=app');

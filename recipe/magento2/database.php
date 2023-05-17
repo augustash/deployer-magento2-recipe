@@ -13,6 +13,14 @@ namespace Deployer;
 
 use Deployer\Exception\RunException;
 
+/**
+ * Settings.
+ */
+set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+
+/**
+ * Tasks.
+ */
 desc('Check Magento if database upgrade needed');
 task('magento:database:needs_upgrade', function () {
     within('{{release_or_current_path}}', function () {

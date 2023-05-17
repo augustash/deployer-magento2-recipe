@@ -14,7 +14,7 @@ namespace Deployer;
 use Deployer\Exception\Exception;
 
 /**
- * Binary locations.
+ * Settings.
  */
 set('bin/n98-magerun2', '/usr/local/bin/n98-magerun2');
 set('default_timeout', 300);

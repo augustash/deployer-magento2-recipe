@@ -12,9 +12,19 @@ declare(strict_types=1);
 namespace Deployer;
 
 /**
- * Binary locations.
+ * Settings.
  */
-set('bin/composer', '/bin/composer');
+set('bin/composer', function () {
+    return which('composer');
+});
+set('magento_composer_auth_config', []);
+set('magento_composer_options', [
+    '--no-progress',
+    '--no-interaction',
+    '--no-scripts',
+    '--no-dev',
+    '--prefer-dist',
+]);
 
 /**
  * Tasks.

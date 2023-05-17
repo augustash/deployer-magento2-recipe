@@ -37,13 +37,7 @@ set('artifact_excludes_path', 'deploy');
 set('artifact_file', 'artifact_bundle.tar');
 set('artifact_path', 'artifacts');
 set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
-set('bin/sed', function () {
-    return which('sed');
-});
 set('clear_paths', []);
-set('content_version', function () {
-    return time();
-});
 set('keep_releases', 5);
 set('magento_compilation_strategy', null);
 set('magento_composer_auth_config', []);
@@ -54,7 +48,7 @@ set('magento_composer_options', [
     '--no-dev',
     '--prefer-dist',
 ]);
-set('magento_deploy_jobs', 1);
+set('magento_deploy_jobs', 8);
 set('magento_deploy_languages', ['en_US']);
 set('magento_deploy_themes', []);
 set('magento_dev_modules', [
@@ -179,7 +173,7 @@ task('artifact:prepare', [
 ]);
 
 /**
- * Events
+ * Events.
  */
 fail('deploy:artifact', 'deploy:failed');
 after('deploy:failed', 'deploy:unlock');

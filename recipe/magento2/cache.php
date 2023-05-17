@@ -16,6 +16,11 @@ use Symfony\Component\Console\Input\InputOption;
 option('cache-types', null, InputOption::VALUE_OPTIONAL, 'A comma-separated list of cache types to enable or disable.');
 
 /**
+ * Settings.
+ */
+set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+
+/**
  * Tasks.
  */
 desc('Clean Magento cache storage');

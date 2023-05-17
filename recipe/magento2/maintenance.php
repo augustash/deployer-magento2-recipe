@@ -11,6 +11,14 @@ declare(strict_types=1);
 
 namespace Deployer;
 
+/**
+ * Settings.
+ */
+set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+
+/**
+ * Tasks.
+ */
 desc('Set maintenance mode exempt IPs');
 task('magento:maintenance:allow-ips', function () {
     within('{{release_or_current_path}}', function () {

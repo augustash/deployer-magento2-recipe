@@ -13,6 +13,15 @@ namespace Deployer;
 
 use Deployer\Exception\Exception;
 
+/**
+ * Settings.
+ */
+set('magento_dev_modules', []);
+set('magento_override_files', []);
+
+/**
+ * Tasks.
+ */
 desc('Deploy custom file overrides');
 task('magento:override:files', function () {
     within('{{release_or_current_path}}', function () {
@@ -26,12 +35,16 @@ task('magento:override:files', function () {
             }
 
             run(\sprintf('rm -f {{release_or_current_path}}/{{magento_root}}%s', $file));
-            run(\sprintf('cp -f {{deploy_path}}/shared/{{magento_root}}%s {{release_or_current_path}}/{{magento_root}}%s', $file, $file));
+            run(\sprintf(
+                'cp -f {{deploy_path}}/shared/{{magento_root}}%s {{release_or_current_path}}/{{magento_root}}%s',
+                $file,
+                $file
+            ));
         }
     });
 })->select('role=app');
 
-desc('Remove modules (devlopment) from configuration');
+desc('Remove modules (development) from configuration');
 task('magento:override:modules', function () {
     within('{{release_or_current_path}}', function () {
         $modules = get('magento_dev_modules', []);

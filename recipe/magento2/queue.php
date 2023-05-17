@@ -12,14 +12,17 @@ declare(strict_types=1);
 namespace Deployer;
 
 /**
- * Binary locations.
+ * Settings.
  */
-set('bin/python', '/usr/bin/python3');
-set('bin/supervisord', '${HOME}/supervisord/supervisord');
-
-/**
- * Default settings.
- */
+set('bin/pkill', function () {
+    return which('pkill');
+});
+set('bin/python', function () {
+    return which('python');
+});
+set('bin/supervisord', function () {
+    return which('supervisord');
+});
 set('supervisor_config', '${HOME}/supervisord/supervisord.conf');
 
 /**
@@ -27,12 +30,12 @@ set('supervisor_config', '${HOME}/supervisord/supervisord.conf');
  */
 desc('Terminate Magento Message Consumers');
 task('magento:queue:consumers:remove', function () {
-    run('pkill -f queue:consumers:start || true');
+    run('{{bin/pkill}} -f queue:consumers:start || true');
 })->select('role=app');
 
 desc('Terminate Supervisor');
 task('magento:queue:supervisor:remove', function () {
-    run('pkill -f supervisord || true');
+    run('{{bin/pkill}} -f supervisord || true');
 })->select('role=app');
 
 desc('Start Supervisor');

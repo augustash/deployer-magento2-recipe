@@ -14,14 +14,42 @@ namespace Deployer;
 use Deployer\Exception\GracefulShutdownException;
 use Deployer\Host\Host;
 
+/**
+ * Settings.
+ */
+set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+set('bin/sed', function () {
+    return which('sed');
+});
+set('content_version', function () {
+    return time();
+});
+set('magento_compilation_strategy', null);
+set('magento_deploy_jobs', 8);
+set('magento_deploy_languages', ['en_US']);
+set('magento_deploy_themes', []);
+set('magento_perms_dirs', '2755');
+set('magento_perms_files', '0644');
+
+/**
+ * Tasks.
+ */
 desc('Normalize Magento filesystem permissions');
 task('magento:deploy:permissions', function () {
     within('{{release_or_current_path}}', function () {
-        $dirs = get('magento_perms_dirs', '2770');
-        $files = get('magento_perms_files', '0660');
+        $dirs = get('magento_perms_dirs', '2755');
+        $files = get('magento_perms_files', '0644');
 
-        run('find {{release_or_current_path}}/{{magento_root}} -type d ! -perm ' . $dirs . ' -exec chmod ' . $dirs . ' {} +');
-        run('find {{release_or_current_path}}/{{magento_root}} -type f ! -perm ' . $files . ' -exec chmod ' . $files . ' {} +');
+        run(\sprintf(
+            "find {{release_or_current_path}}/{{magento_root}} -type d ! -perm 2770 -exec chmod %s {} +",
+            $dirs
+        ));
+
+        run(\sprintf(
+            "find {{release_or_current_path}}/{{magento_root}} -type f ! -path '*bin/*' ! -name '*.sh' ! -perm 0660 -exec chmod %s {} +",
+            $files
+        ));
+
         run('chmod +x {{release_or_current_path}}/{{magento_root}}bin/magento');
         run('chmod +x {{release_or_current_path}}/{{magento_root}}vendor/bin/*');
     });

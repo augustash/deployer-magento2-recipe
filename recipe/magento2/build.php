@@ -70,6 +70,15 @@ task('magento:deploy:verify', function () {
     }
 })->select('role=app');
 
+desc('Verify Magento first deploy on the remote server');
+task('magento:deploy:verify:installed', function () {
+    if (test('[ ! -f {{release_or_current_path}}/{{magento_root}}bin/magento ]')) {
+        throw new GracefulShutdownException(
+            'Magento does not appear to be installed. Please install the application and retry!'
+        );
+    }
+})->select('role=app');
+
 desc('Enable developer application mode');
 task('magento:deploy_mode:developer', function () {
     within('{{release_or_current_path}}', function () {

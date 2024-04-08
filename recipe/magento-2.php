@@ -139,6 +139,7 @@ desc('Deploy Magento 2 build artifact');
 task('magento:update', [
     'magento:crontab:disable',
     'magento:maintenance:enable',
+    'magento:cache:flush',
     'magento:database:upgrade',
     'magento:configuration:import',
     'magento:crontab:enable',

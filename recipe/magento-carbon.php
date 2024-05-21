@@ -35,4 +35,4 @@ add('shared_files', [
  */
 after('magento:carbon:setup', 'magento:carbon:install');
 after('magento:override:files', 'magento:carbon:setup');
-before('magento:setup:static-content:deploy', 'magento:carbon:deploy');
+before('magento:static-content:deploy', 'magento:carbon:deploy');

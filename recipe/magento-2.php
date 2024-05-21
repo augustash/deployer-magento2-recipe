@@ -98,6 +98,15 @@ set('writable_dirs', [
 /**
  * Tasks.
  */
+
+/**
+ * Add faux wrapper for magento:setup:static-content:deploy
+ */
+desc('Wrapper to magento:static-content:deploy for legacy recipes');
+task('magento:setup:static-content:deploy', [
+    'magento:static-content:deploy',
+]);
+
 desc('Deploy Magento 2');
 task('deploy', [
     'deploy:prepare',

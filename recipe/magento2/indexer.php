@@ -14,7 +14,8 @@ namespace Deployer;
 /**
  * Settings.
  */
-set('bin/magento', '{{bin/php}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
+set('memory_limit', '-1');
+set('bin/magento', '{{bin/php}} -d memory_limit={{memory_limit}} -f {{release_or_current_path}}/{{magento_root}}bin/magento');
 
 /**
  * Tasks.

@@ -16,7 +16,8 @@ use Deployer\Exception\Exception;
 /**
  * Settings.
  */
-set('bin/n98-magerun2', '/usr/local/bin/n98-magerun2');
+set('memory_limit', '-1');
+set('bin/n98-magerun2', 'php -d memory_limit={{memory_limit}} /usr/local/bin/n98-magerun2');
 set('default_timeout', 300);
 set('download_name', 'deployer_backup');
 

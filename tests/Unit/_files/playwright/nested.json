@@ -1,0 +1,121 @@
+{
+  "config": {
+    "configFile": "playwright.config.ts",
+    "rootDir": "/var/www/html/x",
+    "version": "1.63.0"
+  },
+  "suites": [
+    {
+      "title": "base-tests/cart.spec.ts",
+      "file": "base-tests/cart.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Cart",
+          "file": "base-tests/cart.spec.ts",
+          "column": 0,
+          "line": 0,
+          "specs": [
+            {
+              "title": "Adds item",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1000,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-06T12:00:00.000Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "x",
+              "file": "base-tests/cart.spec.ts",
+              "line": 5,
+              "column": 5
+            }
+          ],
+          "suites": [
+            {
+              "title": "Coupons",
+              "file": "base-tests/cart.spec.ts",
+              "column": 0,
+              "line": 0,
+              "specs": [
+                {
+                  "title": "Applies code",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 150000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 1000,
+                          "errors": [
+                            {
+                              "message": "Boom"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-06T12:00:00.000Z",
+                          "annotations": [],
+                          "attachments": [],
+                          "error": {
+                            "message": "Boom",
+                            "stack": "Boom"
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "x",
+                  "file": "base-tests/cart.spec.ts",
+                  "line": 12,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-06T12:00:00.000Z",
+    "duration": 3000,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

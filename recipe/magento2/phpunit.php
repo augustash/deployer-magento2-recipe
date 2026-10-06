@@ -22,6 +22,7 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
  * phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
  */
 // Loaded directly as well as via Composer so the recipe also works with a global/phar Deployer.
+require_once __DIR__ . '/../../src/AbstractGate.php';
 require_once __DIR__ . '/../../src/PhpUnitGate.php';
 
 /**

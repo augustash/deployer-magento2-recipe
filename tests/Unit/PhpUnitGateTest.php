@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Augustash\Deployer\Test\Unit;
 
+use Augustash\Deployer\PhpUnitGate;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Augustash\Deployer\PhpUnitGate;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Magento2.Functions.DiscouragedFunction
@@ -444,26 +444,6 @@ class PhpUnitGateTest extends TestCase
         $this->assertSame(['vendor/augustash/lib/Test/Unit' => null], $skipped);
     }
 
-    #[DataProvider('booleanSettingProvider')]
-    public function testIsTruthyParsesBooleanSettings(mixed $value, bool $expected): void
-    {
-        $this->assertSame($expected, $this->gate->isTruthy($value));
-    }
-
-    /**
-     * @return array<string, array{mixed, bool}>
-     */
-    public static function booleanSettingProvider(): array
-    {
-        return [
-            'bool false' => [false, false],
-            'bool true' => [true, true],
-            'string false' => ['false', false],
-            'string one' => ['1', true],
-            'string zero' => ['0', false],
-        ];
-    }
-
     public function testReportOptionsUseTestdoxWithoutProgressOrColors(): void
     {
         $this->assertSame(['--testdox', '--no-progress', '--colors=never'], PhpUnitGate::REPORT_OPTIONS);
@@ -529,33 +509,6 @@ class PhpUnitGateTest extends TestCase
         $this->assertSame([], $this->gate->formatReport($this->testdoxOutput(), true));
     }
 
-    #[DataProvider('reportModeProvider')]
-    public function testNormalizeReportModeAcceptsKnownModes(mixed $value, string $expected): void
-    {
-        $this->assertSame($expected, $this->gate->normalizeReportMode($value));
-    }
-
-    /**
-     * @return array<string, array{mixed, string}>
-     */
-    public static function reportModeProvider(): array
-    {
-        return [
-            'empty defaults to summary' => ['', PhpUnitGate::REPORT_SUMMARY],
-            'mixed case tests' => [' Tests ', PhpUnitGate::REPORT_TESTS],
-            'null defaults to summary' => [null, PhpUnitGate::REPORT_SUMMARY],
-            'summary' => ['summary', PhpUnitGate::REPORT_SUMMARY],
-            'tests' => ['tests', PhpUnitGate::REPORT_TESTS],
-        ];
-    }
-
-    public function testNormalizeReportModeThrowsForUnknownMode(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->gate->normalizeReportMode('verbose');
-    }
-
     #[DataProvider('summaryLineProvider')]
     public function testSummaryLineReturnsPhpunitResultLine(string $output, string $expected): void
     {
@@ -585,182 +538,5 @@ class PhpUnitGateTest extends TestCase
 
         $this->assertTrue($this->gate->phpunitBinExists($root, 'vendor/bin/phpunit'));
         $this->assertFalse($this->gate->phpunitBinExists($root, 'vendor/bin/nope'));
-    }
-
-    /**
-     * @param mixed $input
-     * @param string[] $expected
-     */
-    #[DataProvider('listProvider')]
-    public function testNormalizeListSplitsCommaSeparatedString(mixed $input, array $expected): void
-    {
-        $this->assertSame($expected, $this->gate->normalizeList($input));
-    }
-
-    /**
-     * @return array<string, array{mixed, string[]}>
-     */
-    public static function listProvider(): array
-    {
-        return [
-            'array' => [['app/code'], ['app/code']],
-            'comma separated' => ['app/code,local-src', ['app/code', 'local-src']],
-            'padded with empties' => [' app/code , ', ['app/code']],
-        ];
-    }
-
-    public function testNormalizeTimeoutReturnsIntForNumericString(): void
-    {
-        $this->assertSame(900, $this->gate->normalizeTimeout('900'));
-    }
-
-    #[DataProvider('emptyTimeoutProvider')]
-    public function testNormalizeTimeoutReturnsNullForEmptyOrZero(mixed $value): void
-    {
-        $this->assertNull($this->gate->normalizeTimeout($value));
-    }
-
-    /**
-     * @return array<string, array{mixed}>
-     */
-    public static function emptyTimeoutProvider(): array
-    {
-        return [
-            'empty string' => [''],
-            'int zero' => [0],
-            'null' => [null],
-            'string zero' => ['0'],
-        ];
-    }
-
-    public function testNormalizeTimeoutThrowsForNonNumericValue(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->gate->normalizeTimeout('soon');
-    }
-
-    #[DataProvider('truthySkipProvider')]
-    public function testIsSkipRequestedReturnsTrueForTruthyStrings(mixed $value): void
-    {
-        $this->assertTrue($this->gate->isSkipRequested($value));
-    }
-
-    /**
-     * @return array<string, array{mixed}>
-     */
-    public static function truthySkipProvider(): array
-    {
-        return [
-            'on' => ['on'],
-            'one' => ['1'],
-            'true bool' => [true],
-            'true string' => ['true'],
-            'yes' => ['yes'],
-        ];
-    }
-
-    #[DataProvider('falsySkipProvider')]
-    public function testIsSkipRequestedReturnsFalseForFalsyOrMissingValues(mixed $value): void
-    {
-        $this->assertFalse($this->gate->isSkipRequested($value));
-    }
-
-    /**
-     * @return array<string, array{mixed}>
-     */
-    public static function falsySkipProvider(): array
-    {
-        return [
-            'empty' => [''],
-            'false bool' => [false],
-            'false string' => ['false'],
-            'no' => ['no'],
-            'null' => [null],
-            'zero' => ['0'],
-        ];
-    }
-
-    public function testRequiresSkipConfirmationReturnsTrueForProductionStage(): void
-    {
-        $this->assertTrue($this->gate->requiresSkipConfirmation('production'));
-    }
-
-    #[DataProvider('nonProductionStageProvider')]
-    public function testRequiresSkipConfirmationReturnsFalseForOtherOrMissingStages(?string $stage): void
-    {
-        $this->assertFalse($this->gate->requiresSkipConfirmation($stage));
-    }
-
-    /**
-     * @return array<string, array{string|null}>
-     */
-    public static function nonProductionStageProvider(): array
-    {
-        return [
-            'empty' => [''],
-            'null' => [null],
-            'staging' => ['staging'],
-        ];
-    }
-
-    public function testCheckoutWarningsIsEmptyWhenBranchMatchesAndTreeClean(): void
-    {
-        $this->assertSame([], $this->gate->checkoutWarnings('develop', 'develop', self::SHA, false));
-    }
-
-    public function testCheckoutWarningsReportsBranchMismatch(): void
-    {
-        $warnings = $this->gate->checkoutWarnings('master', 'develop', self::SHA, false);
-
-        $this->assertCount(1, $warnings);
-        $this->assertStringContainsString('master', $warnings[0]);
-        $this->assertStringContainsString('develop', $warnings[0]);
-    }
-
-    public function testCheckoutWarningsReportsDirtyWorkingTree(): void
-    {
-        $warnings = $this->gate->checkoutWarnings('develop', 'develop', self::SHA, true);
-
-        $this->assertCount(1, $warnings);
-        $this->assertStringContainsString('uncommitted', $warnings[0]);
-    }
-
-    #[DataProvider('unsetTargetProvider')]
-    public function testCheckoutWarningsSkipsBranchCheckWhenHostBranchUnset(?string $target): void
-    {
-        $this->assertSame([], $this->gate->checkoutWarnings($target, 'develop', self::SHA, false));
-    }
-
-    /**
-     * @return array<string, array{string|null}>
-     */
-    public static function unsetTargetProvider(): array
-    {
-        return [
-            'empty' => [''],
-            'HEAD fallback' => ['HEAD'],
-            'null' => [null],
-        ];
-    }
-
-    public function testCheckoutWarningsTreatsTargetMatchingLocalShaAsMatch(): void
-    {
-        $this->assertSame([], $this->gate->checkoutWarnings(self::SHA, 'HEAD', self::SHA, false));
-        $this->assertSame([], $this->gate->checkoutWarnings(substr(self::SHA, 0, 7), 'HEAD', self::SHA, false));
-        $this->assertNotSame([], $this->gate->checkoutWarnings(substr(self::SHA, 0, 6), 'develop', self::SHA, false));
-    }
-
-    public function testCheckoutWarningsReportsDetachedHeadWhenTargetIsABranch(): void
-    {
-        $warnings = $this->gate->checkoutWarnings('develop', 'HEAD', self::SHA, false);
-
-        $this->assertCount(1, $warnings);
-        $this->assertStringContainsString('detached HEAD', $warnings[0]);
-    }
-
-    public function testCheckoutWarningsReportsBothMismatchAndDirtyTogether(): void
-    {
-        $this->assertCount(2, $this->gate->checkoutWarnings('master', 'develop', self::SHA, true));
     }
 }

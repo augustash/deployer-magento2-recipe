@@ -1,0 +1,105 @@
+{
+  "config": {
+    "configFile": "playwright.config.ts",
+    "rootDir": "/var/www/html/x",
+    "version": "1.63.0"
+  },
+  "suites": [
+    {
+      "title": "init.setup.ts",
+      "file": "init.setup.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "create admin",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "setup",
+              "projectName": "setup",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": [],
+                  "error": {
+                    "message": "Login failed"
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "x",
+          "file": "init.setup.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "base-tests/home.spec.ts",
+      "file": "base-tests/home.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Loads home",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 1000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "x",
+          "file": "base-tests/home.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-06T12:00:00.000Z",
+    "duration": 4000,
+    "expected": 0,
+    "skipped": 1,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

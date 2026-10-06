@@ -39,9 +39,14 @@ class PlaywrightGate extends AbstractGate
     /**
      * Build the ddev command that runs one theme's Playwright suite in CI mode.
      *
+     * Grep and grep-invert patterns are regexes matched against test titles, so tags such as "@hot" work too.
+     * Several patterns are combined into one alternation. Test file filters go last, after the options.
+     *
      * @param string $theme Theme as <vendor>/<theme>
      * @param string[] $projects
-     * @param string $grep
+     * @param string[] $grep Only run tests whose title matches one of these patterns
+     * @param string[] $grepInvert Skip tests whose title matches one of these patterns
+     * @param string[] $testFiles Playwright file filters, e.g. "base-tests/home.spec.ts"
      * @param int|null $timeoutSeconds Playwright's own global timeout, so it still writes the JSON report
      * @param string[] $options
      * @return string
@@ -50,23 +55,36 @@ class PlaywrightGate extends AbstractGate
     public function buildCommand(
         string $theme,
         array $projects,
-        string $grep,
+        array $grep,
+        array $grepInvert,
+        array $testFiles,
         ?int $timeoutSeconds,
         array $options
     ): string {
         $this->assertTheme($theme);
+        foreach ($testFiles as $testFile) {
+            if (str_starts_with($testFile, '-')) {
+                throw new InvalidArgumentException(sprintf(
+                    'Playwright test file filter "%s" must not start with "-"; use playwright_options for options.',
+                    $testFile
+                ));
+            }
+        }
 
         $arguments = ['--theme=' . $theme];
         foreach ($projects as $project) {
             $arguments[] = '--project=' . $project;
         }
-        if ($grep !== '') {
-            $arguments[] = '--grep=' . $grep;
+        if ($grep !== []) {
+            $arguments[] = '--grep=' . $this->alternation($grep);
+        }
+        if ($grepInvert !== []) {
+            $arguments[] = '--grep-invert=' . $this->alternation($grepInvert);
         }
         if ($timeoutSeconds !== null) {
             $arguments[] = '--global-timeout=' . ($timeoutSeconds * 1000);
         }
-        array_push($arguments, ...$options);
+        array_push($arguments, ...$options, ...$testFiles);
 
         return 'ddev playwright test --ci ' . implode(' ', array_map('escapeshellarg', $arguments));
     }
@@ -382,5 +400,20 @@ class PlaywrightGate extends AbstractGate
         $seconds = (int) round($milliseconds / 1000);
 
         return $seconds >= 60 ? intdiv($seconds, 60) . 'm ' . ($seconds % 60) . 's' : $seconds . 's';
+    }
+
+    /**
+     * Combine regex patterns into one alternation; a single pattern is returned unchanged.
+     *
+     * @param string[] $patterns
+     * @return string
+     */
+    private function alternation(array $patterns): string
+    {
+        if (count($patterns) === 1) {
+            return $patterns[0];
+        }
+
+        return implode('|', array_map(static fn(string $pattern): string => '(?:' . $pattern . ')', $patterns));
     }
 }

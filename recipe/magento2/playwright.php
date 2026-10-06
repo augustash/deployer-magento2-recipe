@@ -32,8 +32,12 @@ require_once __DIR__ . '/../../src/PlaywrightGate.php';
 set('playwright_themes', []);
 // Playwright projects to run; the seed and setup projects run as dependencies.
 set('playwright_projects', ['chromium']);
-// Optional --grep pattern to narrow the suite.
-set('playwright_grep', '');
+// Which tests to run. Patterns are regexes matched against test titles, so tags work too (e.g. "@hot").
+// Only tests matching one of playwright_grep run; tests matching one of playwright_grep_invert are skipped.
+set('playwright_grep', []);
+set('playwright_grep_invert', []);
+// Spec files or path patterns to limit the run to, relative to the theme's web/playwright folder.
+set('playwright_test_files', []);
 // Extra raw arguments passed to "playwright test".
 set('playwright_options', []);
 // Seconds. Passed to Playwright as --global-timeout, so it still writes its report when the time is up.
@@ -70,6 +74,9 @@ task('deploy:playwright', function (): void {
     try {
         $projects = $gate->normalizeList(get('playwright_projects'));
         $options = $gate->normalizeList(get('playwright_options'));
+        $grep = $gate->normalizeList(get('playwright_grep'));
+        $grepInvert = $gate->normalizeList(get('playwright_grep_invert'));
+        $testFiles = $gate->normalizeList(get('playwright_test_files'));
         $timeout = $gate->normalizeTimeout(get('playwright_timeout'), 'playwright_timeout');
         $reportMode = $gate->normalizeReportMode(get('playwright_report'), 'playwright_report');
         $themes = $gate->normalizeList(get('playwright_themes'));
@@ -117,7 +124,9 @@ task('deploy:playwright', function (): void {
                 'run' => $gate->buildCommand(
                     $theme,
                     $projects,
-                    (string) get('playwright_grep'),
+                    $grep,
+                    $grepInvert,
+                    $testFiles,
                     $timeout,
                     $options
                 ),
@@ -224,7 +233,8 @@ task('deploy:playwright', function (): void {
         $out->writeln($resultLine($passed, $theme, $summary));
         if ($passed && $parsed['tests'] === []) {
             warning(sprintf(
-                'Playwright ran no tests for %s (check playwright_grep and playwright_projects).',
+                'Playwright ran no tests for %s (check playwright_grep, playwright_grep_invert, playwright_test_files '
+                    . 'and playwright_projects).',
                 $theme
             ));
         }

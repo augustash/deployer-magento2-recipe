@@ -49,13 +49,13 @@ class PlaywrightGateTest extends TestCase
     {
         $this->assertSame(
             "ddev playwright test --ci '--theme=Streichers/HyvaCspFrontend' '--project=chromium' '--project=firefox'",
-            $this->gate->buildCommand(self::THEME, ['chromium', 'firefox'], '', null, [])
+            $this->gate->buildCommand(self::THEME, ['chromium', 'firefox'], [], [], [], null, [])
         );
     }
 
     public function testBuildCommandShellEscapesGrepAndOptions(): void
     {
-        $command = $this->gate->buildCommand(self::THEME, ['chromium'], "it's; rm -rf /", null, ['--repeat-each=2', 'a b']);
+        $command = $this->gate->buildCommand(self::THEME, ['chromium'], ["it's; rm -rf /"], [], [], null, ['--repeat-each=2', 'a b']);
 
         $this->assertStringContainsString("'--grep=it'\\''s; rm -rf /'", $command);
         $this->assertStringEndsWith("'--repeat-each=2' 'a b'", $command);
@@ -65,12 +65,66 @@ class PlaywrightGateTest extends TestCase
     {
         $this->assertStringContainsString(
             "'--global-timeout=600000'",
-            $this->gate->buildCommand(self::THEME, ['chromium'], '', 600, [])
+            $this->gate->buildCommand(self::THEME, ['chromium'], [], [], [], 600, [])
         );
         $this->assertStringNotContainsString(
             'global-timeout',
-            $this->gate->buildCommand(self::THEME, ['chromium'], '', null, [])
+            $this->gate->buildCommand(self::THEME, ['chromium'], [], [], [], null, [])
         );
+    }
+
+    public function testBuildCommandJoinsSeveralGrepPatternsIntoOneAlternation(): void
+    {
+        $this->assertStringContainsString(
+            "'--grep=(?:@hot)|(?:@smoke)'",
+            $this->gate->buildCommand(self::THEME, ['chromium'], ['@hot', '@smoke'], [], [], null, [])
+        );
+    }
+
+    public function testBuildCommandPassesASingleGrepPatternUnchanged(): void
+    {
+        $this->assertStringContainsString(
+            "'--grep=@checkout'",
+            $this->gate->buildCommand(self::THEME, ['chromium'], ['@checkout'], [], [], null, [])
+        );
+    }
+
+    public function testBuildCommandAddsGrepInvertForExcludedPatterns(): void
+    {
+        $this->assertStringContainsString(
+            "'--grep-invert=(?:@cold)|(?:@coupon-code)'",
+            $this->gate->buildCommand(self::THEME, ['chromium'], [], ['@cold', '@coupon-code'], [], null, [])
+        );
+    }
+
+    public function testBuildCommandOmitsGrepFlagsWhenNoPatternsGiven(): void
+    {
+        $command = $this->gate->buildCommand(self::THEME, ['chromium'], [], [], [], null, []);
+
+        $this->assertStringNotContainsString('--grep', $command);
+    }
+
+    public function testBuildCommandAppendsTestFileFiltersAfterOptions(): void
+    {
+        $this->assertStringEndsWith(
+            "'--retries=1' 'base-tests/home.spec.ts' 'tests/checkout-po.spec.ts'",
+            $this->gate->buildCommand(
+                self::THEME,
+                ['chromium'],
+                [],
+                [],
+                ['base-tests/home.spec.ts', 'tests/checkout-po.spec.ts'],
+                null,
+                ['--retries=1']
+            )
+        );
+    }
+
+    public function testBuildCommandRejectsTestFileFilterThatLooksLikeAnOption(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->gate->buildCommand(self::THEME, ['chromium'], [], [], ['--update-snapshots'], null, []);
     }
 
     #[DataProvider('invalidThemes')]
@@ -78,7 +132,7 @@ class PlaywrightGateTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->gate->buildCommand($theme, ['chromium'], '', null, []);
+        $this->gate->buildCommand($theme, ['chromium'], [], [], [], null, []);
     }
 
     /**

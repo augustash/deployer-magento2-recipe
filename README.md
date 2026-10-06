@@ -161,13 +161,36 @@ The gate runs `ddev playwright test --ci` once per theme. In CI mode no browser 
 
 The tests run against the local DDEV site exactly as it is. The gate doesn't build the site or refresh its database, so a stale or different local site can make tests pass or fail spuriously. The seeders write to the local database on every run.
 
-By default the gate runs the full suite on the Chromium project only (the seed and setup projects run as dependencies). Expect several minutes. Narrow the run with `playwright_projects` or `playwright_grep`, e.g. `-o playwright_grep=checkout`.
+By default the gate runs the full suite on the Chromium project only (the seed and setup projects run as dependencies). Expect several minutes. To choose which tests run, use these three settings:
+
+- `playwright_grep`: run only tests whose title matches one of these patterns.
+- `playwright_grep_invert`: skip tests that match one of these patterns.
+- `playwright_test_files`: run only these spec files.
+
+Patterns are regexes matched against the full test title, which includes its tags, so tags like `@hot` or `@checkout` work directly. Several patterns are combined into one, so a test is included or excluded if it matches any of them. The seed and setup projects always run, whatever the filters. For example, in `hosts.yml`:
+
+```yaml
+  staging:
+    <<: *base
+    playwright_grep:
+      - '@hot'
+    playwright_grep_invert:
+      - '@coupon-code'
+      - 'Change_password'
+    playwright_test_files:
+      - base-tests/checkout.spec.ts
+      - tests/checkout-po.spec.ts
+```
+
+Or for one run: `-o playwright_grep=@hot -o playwright_grep_invert=@coupon-code,@accessibility`.
 
 | Setting | Default | Purpose |
 |---|---|---|
 | `playwright_themes` | `[]` | Themes as `<vendor>/<theme>`. Empty reads `PLAYWRIGHT_THEME_DIRS` from DDEV. |
 | `playwright_projects` | `['chromium']` | Playwright projects to run |
-| `playwright_grep` | `''` | Only run tests matching this pattern (`--grep`) |
+| `playwright_grep` | `[]` | Only run tests whose title matches one of these regexes or tags (`--grep`) |
+| `playwright_grep_invert` | `[]` | Skip tests whose title matches one of these regexes or tags (`--grep-invert`) |
+| `playwright_test_files` | `[]` | Spec files or path patterns, relative to the theme's `web/playwright` folder |
 | `playwright_options` | `[]` | Extra arguments passed to `playwright test` |
 | `playwright_timeout` | `null` (no limit) | Time limit in seconds, per theme |
 | `playwright_report` | `summary` | `summary`: one line per theme, with details only for failing tests. `tests`: every test of every theme. |
@@ -175,7 +198,7 @@ By default the gate runs the full suite on the Chromium project only (the seed a
 
 `playwright_timeout` becomes Playwright's `--global-timeout`, so Playwright stops itself and still writes its report. The local process gets 120 seconds more as a backstop. If that hard timeout is hit, the gate kills any leftover `playwright test` in the web container so it can't keep writing to the database.
 
-Set these per host in `hosts.yml`, or for one run with `-o`. With `-o`, give lists comma-separated, e.g. `-o playwright_projects=chromium,firefox`. `-o` values can't contain `=`, so something like `playwright_options=--workers=2`, or a `playwright_grep` containing `=`, must go in `hosts.yml`. Deployer's `--no-hooks` and `--start-from` options skip the gate.
+Set these per host in `hosts.yml`, or for one run with `-o`. With `-o`, give lists comma-separated, e.g. `-o playwright_projects=chromium,firefox`. `-o` values can't contain `=`, so something like `playwright_options=--workers=2`, or a pattern containing `=` or `,`, must go in `hosts.yml`. Patterns also can't contain `{{`, which Deployer treats as a placeholder. Deployer's `--no-hooks` and `--start-from` options skip the gate.
 
 Like the PHPUnit gate, it also warns when the local checkout differs from the deploy target, or when tracked files have uncommitted changes.
 

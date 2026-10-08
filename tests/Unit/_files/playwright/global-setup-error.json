@@ -1,0 +1,22 @@
+{
+  "config": {
+    "configFile": "playwright.config.ts",
+    "rootDir": "/var/www/html/x",
+    "version": "1.63.0"
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "\u001b[31mError: page.goto: net::ERR_CONNECTION_REFUSED\u001b[39m\n at globalSetup",
+      "stack": "stack"
+    }
+  ],
+  "stats": {
+    "startTime": "2026-10-06T12:00:00.000Z",
+    "duration": 2000,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

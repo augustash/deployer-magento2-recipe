@@ -1,0 +1,418 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/n/bin/node",
+      "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "probe.config.ts",
+      "--reporter=json"
+    ],
+    "configFile": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.config.ts",
+    "rootDir": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/out",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "setup",
+        "name": "setup",
+        "testDir": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe",
+        "testIgnore": [],
+        "testMatch": [
+          "/probe\\.setup\\.ts$/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/out",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe",
+        "testIgnore": [],
+        "testMatch": [
+          "/probe\\.spec\\.ts$/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "probe.setup.ts",
+      "file": "probe.setup.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "prepare",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "setup",
+              "projectName": "setup",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T19:39:17.996Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "beeb059148331e26a8c7-3c28972136f070336d78",
+          "file": "probe.setup.ts",
+          "line": 2,
+          "column": 6
+        }
+      ]
+    },
+    {
+      "title": "probe.spec.ts",
+      "file": "probe.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Group",
+          "file": "probe.spec.ts",
+          "line": 2,
+          "column": 6,
+          "specs": [
+            {
+              "title": "passes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-06T19:39:18.480Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9223f0ac28d4fb57516f-032a2a0df0bd4370afb2",
+              "file": "probe.spec.ts",
+              "line": 3,
+              "column": 7
+            },
+            {
+              "title": "fails",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 9,
+                      "error": {
+                        "message": "Error: values differ\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"b\"\u001b[39m\nReceived: \u001b[31m\"a\"\u001b[39m",
+                        "stack": "Error: values differ\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"b\"\u001b[39m\nReceived: \u001b[31m\"a\"\u001b[39m\n    at /var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts:4:60",
+                        "location": {
+                          "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                          "column": 60,
+                          "line": 4
+                        },
+                        "snippet": "  2 | test.describe('Group', () => {\n  3 |   test('passes', async () => { expect(1).toBe(1); });\n> 4 |   test('fails', async () => { expect('a', 'values differ').toBe('b'); });\n    |                                                            ^\n  5 |   test('flaky', async ({}, info) => { expect(info.retry).toBe(1); });\n  6 |   test.skip('skipped', async () => {});\n  7 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                            "column": 60,
+                            "line": 4
+                          },
+                          "message": "Error: values differ\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"b\"\u001b[39m\nReceived: \u001b[31m\"a\"\u001b[39m\n\n  2 | test.describe('Group', () => {\n  3 |   test('passes', async () => { expect(1).toBe(1); });\n> 4 |   test('fails', async () => { expect('a', 'values differ').toBe('b'); });\n    |                                                            ^\n  5 |   test('flaky', async ({}, info) => { expect(info.retry).toBe(1); });\n  6 |   test.skip('skipped', async () => {});\n  7 | });\n    at /var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts:4:60"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-06T19:39:18.523Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/out/probe-Group-fails-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                        "column": 60,
+                        "line": 4
+                      }
+                    },
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7,
+                      "error": {
+                        "message": "Error: values differ\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"b\"\u001b[39m\nReceived: \u001b[31m\"a\"\u001b[39m",
+                        "stack": "Error: values differ\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"b\"\u001b[39m\nReceived: \u001b[31m\"a\"\u001b[39m\n    at /var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts:4:60",
+                        "location": {
+                          "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                          "column": 60,
+                          "line": 4
+                        },
+                        "snippet": "  2 | test.describe('Group', () => {\n  3 |   test('passes', async () => { expect(1).toBe(1); });\n> 4 |   test('fails', async () => { expect('a', 'values differ').toBe('b'); });\n    |                                                            ^\n  5 |   test('flaky', async ({}, info) => { expect(info.retry).toBe(1); });\n  6 |   test.skip('skipped', async () => {});\n  7 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                            "column": 60,
+                            "line": 4
+                          },
+                          "message": "Error: values differ\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"b\"\u001b[39m\nReceived: \u001b[31m\"a\"\u001b[39m\n\n  2 | test.describe('Group', () => {\n  3 |   test('passes', async () => { expect(1).toBe(1); });\n> 4 |   test('fails', async () => { expect('a', 'values differ').toBe('b'); });\n    |                                                            ^\n  5 |   test('flaky', async ({}, info) => { expect(info.retry).toBe(1); });\n  6 |   test.skip('skipped', async () => {});\n  7 | });\n    at /var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts:4:60"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-10-06T19:39:18.968Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/out/probe-Group-fails-chromium-retry1/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                        "column": 60,
+                        "line": 4
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9223f0ac28d4fb57516f-118966e2c36a42afddd1",
+              "file": "probe.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "flaky",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n    at /var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts:5:58",
+                        "location": {
+                          "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                          "column": 58,
+                          "line": 5
+                        },
+                        "snippet": "  3 |   test('passes', async () => { expect(1).toBe(1); });\n  4 |   test('fails', async () => { expect('a', 'values differ').toBe('b'); });\n> 5 |   test('flaky', async ({}, info) => { expect(info.retry).toBe(1); });\n    |                                                          ^\n  6 |   test.skip('skipped', async () => {});\n  7 | });\n  8 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                            "column": 58,
+                            "line": 5
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\n  3 |   test('passes', async () => { expect(1).toBe(1); });\n  4 |   test('fails', async () => { expect('a', 'values differ').toBe('b'); });\n> 5 |   test('flaky', async ({}, info) => { expect(info.retry).toBe(1); });\n    |                                                          ^\n  6 |   test.skip('skipped', async () => {});\n  7 | });\n  8 |\n    at /var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts:5:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-06T19:39:19.413Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/out/probe-Group-flaky-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                        "column": 58,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-10-06T19:39:19.792Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "flaky"
+                }
+              ],
+              "id": "9223f0ac28d4fb57516f-e4937950fdb91fe850a1",
+              "file": "probe.spec.ts",
+              "line": 5,
+              "column": 7
+            },
+            {
+              "title": "skipped",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                        "line": 6,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-06T19:39:19.837Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/var/www/html/src/app/design/frontend/Streichers/HyvaCspFrontend/web/playwright/zz-json-probe/probe.spec.ts",
+                            "line": 6,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9223f0ac28d4fb57516f-d9b4ca7b32555a8f2042",
+              "file": "probe.spec.ts",
+              "line": 6,
+              "column": 8
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-06T19:39:17.523Z",
+    "duration": 2326.3720000000003,
+    "expected": 2,
+    "skipped": 1,
+    "unexpected": 1,
+    "flaky": 1
+  }
+}

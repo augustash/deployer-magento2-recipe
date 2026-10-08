@@ -1,0 +1,225 @@
+{
+  "config": {
+    "configFile": "playwright.config.ts",
+    "rootDir": "/var/www/html/x",
+    "version": "1.63.0"
+  },
+  "suites": [
+    {
+      "title": "base-tests/checkout.spec.ts",
+      "file": "base-tests/checkout.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Add coupon",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1000,
+                  "errors": [
+                    {
+                      "message": "\u001b[31mError: \u001b[39m\u001b[2mexpect(\u001b[22mlocator\u001b[2m).toBeVisible()\u001b[22m\n\nLocator: #coupon\nExpected: visible\nReceived: hidden\nCall log:\n  - waiting\n  - waiting more\n  - waiting even more"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": [],
+                  "error": {
+                    "message": "\u001b[31mError: \u001b[39m\u001b[2mexpect(\u001b[22mlocator\u001b[2m).toBeVisible()\u001b[22m\n\nLocator: #coupon\nExpected: visible\nReceived: hidden\nCall log:\n  - waiting\n  - waiting more\n  - waiting even more",
+                    "stack": "\u001b[31mError: \u001b[39m\u001b[2mexpect(\u001b[22mlocator\u001b[2m).toBeVisible()\u001b[22m\n\nLocator: #coupon\nExpected: visible\nReceived: hidden\nCall log:\n  - waiting\n  - waiting more\n  - waiting even more"
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "x",
+          "file": "base-tests/checkout.spec.ts",
+          "line": 10,
+          "column": 5
+        },
+        {
+          "title": "Place order",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1000,
+                  "errors": [
+                    {
+                      "message": "timeout"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": [],
+                  "error": {
+                    "message": "timeout",
+                    "stack": "timeout"
+                  }
+                },
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "flaky"
+            }
+          ],
+          "id": "x",
+          "file": "base-tests/checkout.spec.ts",
+          "line": 30,
+          "column": 5
+        },
+        {
+          "title": "Pay by PO",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "x",
+          "file": "base-tests/checkout.spec.ts",
+          "line": 50,
+          "column": 5
+        },
+        {
+          "title": "Pay by CC",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 1000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "x",
+          "file": "base-tests/checkout.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "Pay by CC 2",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 1000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T12:00:00.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "x",
+          "file": "base-tests/checkout.spec.ts",
+          "line": 70,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-06T12:00:00.000Z",
+    "duration": 192000,
+    "expected": 1,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 1
+  }
+}
